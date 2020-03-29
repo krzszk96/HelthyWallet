@@ -62,6 +62,8 @@ public class MainViewChart extends AppCompatActivity {
             Toast.makeText(MainViewChart.this, "Succes save", Toast.LENGTH_SHORT).show();
             inCategory.setText("");
             inAmount.setText("");
+            inDate.setText("");
+            inTitle.setText("");
             finish();
             startActivity(getIntent());
 

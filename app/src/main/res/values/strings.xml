@@ -4,7 +4,7 @@
     <string name="hint_amount">please enter amount</string>
     <string name="hint_title">please enter title</string>
     <string name="hint_date">please enter date</string>
-    <string name="btn_submit">Submit</string>
+    <string name="btn_submit">Dodaj</string>
     <string name="btn_show_data">Show Data</string>
     <string name="btn_edit_data">Edit Data</string>
     <string name="btn_delete_data">Delete Data</string>
