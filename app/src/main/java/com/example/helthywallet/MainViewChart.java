@@ -22,7 +22,7 @@ import java.nio.Buffer;
 
 public class MainViewChart extends AppCompatActivity {
 
-    EditText inCategory, inAmount;
+    EditText inCategory, inAmount, inTitle, inDate;
     TextView seeData;
 
     @Override
@@ -32,6 +32,8 @@ public class MainViewChart extends AppCompatActivity {
 
         inCategory = (EditText) findViewById(R.id.inCategory);
         inAmount = (EditText) findViewById(R.id.inAmount);
+        inTitle = (EditText) findViewById(R.id.inTitle);
+        inDate = (EditText) findViewById(R.id.inDate);
 
         seeData = (TextView) findViewById(R.id.viewData);
 
@@ -48,12 +50,14 @@ public class MainViewChart extends AppCompatActivity {
     public void btnSubmit(View v){
         String category = inCategory.getText().toString().trim();
         String amount = inAmount.getText().toString().trim();
+        String title = inTitle.getText().toString().trim();
+        String date = inDate.getText().toString().trim();
 
         try{
 
             Database db = new Database(this);
             db.open();
-            db.createEntry(category, amount);
+            db.createEntry(title, amount, date, category);
             db.close();
             Toast.makeText(MainViewChart.this, "Succes save", Toast.LENGTH_SHORT).show();
             inCategory.setText("");
@@ -76,7 +80,7 @@ public class MainViewChart extends AppCompatActivity {
         try{
             Database db = new Database(this);
             db.open();
-            db.updateEntry("1", "pensja", " 5000");
+            db.updateEntry("1", "TFC", " 5000", "27/3/20", "zakupy");
             db.close();
             Toast.makeText(MainViewChart.this, "Success update", Toast.LENGTH_SHORT).show();
             finish();

@@ -13,14 +13,14 @@
         android:orientation="vertical">
 
         <EditText
-            android:id="@+id/editText3"
+            android:id="@+id/inTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="@string/hint_title"
-            android:inputType="textPersonName"
-            android:text="@string/hint_title"
-            android:textColor="#FFFFFF" />
+            android:inputType="text"
+            android:textColorHint="#ffff"
+            android:textColor="@android:color/white"/>
 
         <EditText
             android:id="@+id/inAmount"
@@ -28,8 +28,9 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="@string/hint_amount"
-            android:inputType="date"
-            android:textColorHint="#ffff" />
+            android:inputType="text"
+            android:textColorHint="#ffff"
+            android:textColor="@android:color/white" />
 
         <EditText
             android:id="@+id/inDate"
@@ -37,8 +38,9 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="input date"
-            android:inputType="number"
-            android:textColorHint="#FFFFFF" />
+            android:inputType="text"
+            android:textColorHint="#FFFFFF"
+            android:textColor="@android:color/white"/>
 
         <EditText
             android:id="@+id/inCategory"
@@ -46,8 +48,9 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="@string/hint_category"
-            android:inputType="textPersonName"
-            android:textColorHint="#ffff" />
+            android:inputType="text"
+            android:textColorHint="#ffff"
+            android:textColor="@android:color/white"/>
 
         <Button
             android:id="@+id/addDataBtn"
@@ -81,6 +84,9 @@
             android:id="@+id/viewData"
             android:layout_width="match_parent"
             android:layout_height="152dp"
+            android:layout_marginTop="30dp"
+            android:textColor="@android:color/white"
+            android:textSize="20dp"
             android:text="@string/data" />
 
     </LinearLayout>
