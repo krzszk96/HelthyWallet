@@ -9,4 +9,14 @@
     <string name="btn_edit_data">Edit Data</string>
     <string name="btn_delete_data">Delete Data</string>
     <string name="data">Data from the database</string>
+    
+    <string-array name="cats">
+        <item>Zakupy</item>
+        <item>Dom</item>
+        <item>Rachunki</item>
+        <item>Paliwo</item>
+        <item>Samochód</item>
+        <item>Pensja</item>
+        <item>Inne</item>
+    </string-array>
 </resources>

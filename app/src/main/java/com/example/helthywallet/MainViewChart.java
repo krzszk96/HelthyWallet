@@ -7,8 +7,10 @@ import android.database.SQLException;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,75 +39,7 @@ public class MainViewChart extends AppCompatActivity {
 
         seeData = (TextView) findViewById(R.id.viewData);
 
-        try {
-            Database db = new Database(this);
-            db.open();
-            seeData.setText(db.getData());
-            db.close();
-        }
-        catch (SQLException e){
-            Toast.makeText(MainViewChart.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-        }
-    }
-    public void btnSubmit(View v){
-        String category = inCategory.getText().toString().trim();
-        String amount = inAmount.getText().toString().trim();
-        String title = inTitle.getText().toString().trim();
-        String date = inDate.getText().toString().trim();
 
-        try{
-
-            Database db = new Database(this);
-            db.open();
-            db.createEntry(title, amount, date, category);
-            db.close();
-            Toast.makeText(MainViewChart.this, "Succes save", Toast.LENGTH_SHORT).show();
-            inCategory.setText("");
-            inAmount.setText("");
-            inDate.setText("");
-            inTitle.setText("");
-            finish();
-            startActivity(getIntent());
-
-        } catch (SQLException e) {
-            Toast.makeText(MainViewChart.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-        }
 
     }
-    public void btnShowData(View v){
-
-        //startActivity(new Intent(this, Data.class));
-
-    }
-    public void btnEditData(View v){
-
-        try{
-            Database db = new Database(this);
-            db.open();
-            db.updateEntry("1", "TFC", " 5000", "27/3/20", "zakupy");
-            db.close();
-            Toast.makeText(MainViewChart.this, "Success update", Toast.LENGTH_SHORT).show();
-            finish();
-            startActivity(getIntent());
-        }
-        catch (SQLException e){
-            Toast.makeText(MainViewChart.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-        }
-    }
-    public void btnDeleteData(View v){
-
-        try{
-            Database db = new Database(this);
-            db.open();
-            db.deleteEntry("1");
-            db.close();
-            Toast.makeText(MainViewChart.this, "Success delete!!", Toast.LENGTH_SHORT).show();
-            finish();
-            startActivity(getIntent());
-        }
-        catch (SQLException e){
-            Toast.makeText(MainViewChart.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-        }
-    }
-
 }
