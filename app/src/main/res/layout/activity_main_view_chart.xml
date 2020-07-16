@@ -78,7 +78,7 @@
                         android:textStyle="bold" />
 
                     <EditText
-                        android:id="@+id/inTitle"
+                        android:id="@+id/addTitle"
                         android:layout_width="230dp"
                         android:layout_height="30dp"
                         android:background="@drawable/edit_text_border_dark"
@@ -110,7 +110,7 @@
                         android:text="Kwota:" />
 
                     <EditText
-                        android:id="@+id/inAmount"
+                        android:id="@+id/addAmount"
                         android:layout_width="230dp"
                         android:layout_height="30dp"
                         android:background="@drawable/edit_text_border_dark"
@@ -142,7 +142,7 @@
                         android:text="Data:" />
 
                     <EditText
-                        android:id="@+id/inDate"
+                        android:id="@+id/addDate"
                         android:layout_width="230dp"
                         android:layout_height="30dp"
                         android:background="@drawable/edit_text_border_dark"
@@ -174,7 +174,7 @@
                         android:textStyle="bold" />
 
                     <EditText
-                        android:id="@+id/inCategory"
+                        android:id="@+id/addCategory"
                         android:layout_width="230dp"
                         android:layout_height="30dp"
                         android:background="@drawable/edit_text_border_dark"
@@ -208,18 +208,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
-
-                <Button
-                    android:id="@+id/button"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/btn_edit_data" />
-
-                <Button
-                    android:id="@+id/button2"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/btn_delete_data" />
 
                 <TextView
                     android:id="@+id/viewData"

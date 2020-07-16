@@ -60,7 +60,7 @@
                 android:src="@drawable/accountcircle" />
 
             <EditText
-                android:id="@+id/editText"
+                android:id="@+id/logEmail"
                 android:layout_width="220dp"
                 android:layout_height="40dp"
                 android:layout_marginLeft="20dp"
@@ -91,7 +91,7 @@
                 app:srcCompat="@drawable/baselinelock" />
 
             <EditText
-                android:id="@+id/editText2"
+                android:id="@+id/logPasswd"
                 android:layout_width="220dp"
                 android:layout_height="40dp"
                 android:layout_marginLeft="20dp"

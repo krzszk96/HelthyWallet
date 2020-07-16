@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "855227403178",
+    "firebase_url": "https://healthywallet-efe86.firebaseio.com",
+    "project_id": "healthywallet-efe86",
+    "storage_bucket": "healthywallet-efe86.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:855227403178:android:014e54f9ba06bf6987f9d3",
+        "android_client_info": {
+          "package_name": "com.example.helthywallet"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "855227403178-rfu7dbe02ln3d3aachcb03a2kpr03678.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.helthywallet",
+            "certificate_hash": "759e0edf5cc30cde6900576cd9abbe5dbf1cb87b"
+          }
+        },
+        {
+          "client_id": "855227403178-9ds1fvgm7dhfgqul3hnqkgh4ub847pc4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA8cjPl52VHQY6qVs6LRJKSgRPSHPEAwiA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "855227403178-9ds1fvgm7dhfgqul3hnqkgh4ub847pc4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -32,10 +32,10 @@ public class MainViewChart extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_view_chart);
 
-        inCategory = (EditText) findViewById(R.id.inCategory);
-        inAmount = (EditText) findViewById(R.id.inAmount);
-        inTitle = (EditText) findViewById(R.id.inTitle);
-        inDate = (EditText) findViewById(R.id.inDate);
+        inCategory = (EditText) findViewById(R.id.addCategory);
+        inAmount = (EditText) findViewById(R.id.addAmount);
+        inTitle = (EditText) findViewById(R.id.addTitle);
+        inDate = (EditText) findViewById(R.id.addDate);
 
         seeData = (TextView) findViewById(R.id.viewData);
 
