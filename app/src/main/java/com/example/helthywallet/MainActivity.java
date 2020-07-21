@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
                 if(task.isSuccessful()){
                     entMail.setText("");
                     entPassw.setText("");
-                    startActivity(new Intent(MainActivity.this, MainViewChart.class));
+                    startActivity(new Intent(MainActivity.this, MainScreen.class));
                 }else{
                     Toast.makeText(MainActivity.this, task.getException().getMessage(), Toast.LENGTH_LONG).show();
                 }

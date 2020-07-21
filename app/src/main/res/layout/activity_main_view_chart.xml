@@ -91,6 +91,7 @@
                         android:textColorHint="@color/mainColor" />
                 </LinearLayout>
 
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -148,7 +149,7 @@
                         android:background="@drawable/edit_text_border_dark"
                         android:ems="10"
                         android:paddingLeft="20dp"
-                        android:hint="input date"
+                        android:hint="Wpisz datę"
                         android:inputType="text"
                         android:textSize="15dp"
                         android:textColor="@color/mainColor"
@@ -172,19 +173,23 @@
                         android:textColor="@color/mainColor"
                         android:textSize="15dp"
                         android:textStyle="bold" />
-
-                    <EditText
-                        android:id="@+id/addCategory"
+                    <Spinner
+                        android:id="@+id/categorySpinner"
                         android:layout_width="230dp"
                         android:layout_height="30dp"
-                        android:background="@drawable/edit_text_border_dark"
-                        android:ems="10"
-                        android:paddingLeft="20dp"
-                        android:hint="@string/hint_category"
-                        android:inputType="text"
-                        android:textSize="15dp"
-                        android:textColor="@color/mainColor"
-                        android:textColorHint="@color/mainColor" />
+                        />
+<!--                    <EditText-->
+<!--                        android:id="@+id/addCategory"-->
+<!--                        android:layout_width="230dp"-->
+<!--                        android:layout_height="30dp"-->
+<!--                        android:background="@drawable/edit_text_border_dark"-->
+<!--                        android:ems="10"-->
+<!--                        android:paddingLeft="20dp"-->
+<!--                        android:hint="@string/hint_category"-->
+<!--                        android:inputType="text"-->
+<!--                        android:textSize="15dp"-->
+<!--                        android:textColor="@color/mainColor"-->
+<!--                        android:textColorHint="@color/mainColor" />-->
 
                 </LinearLayout>
 
@@ -201,7 +206,68 @@
                     android:textColor="@color/mainColor" />
 
             </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="140dp"
+            android:layout_margin="20dp"
+            android:background="@drawable/chart_background"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/textView20"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:text="Dodaj kategorie:"
+                android:textColor="@color/mainColor"
+                android:textSize="15dp"
+                android:textStyle="bold" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="30dp"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
 
+                <TextView
+                    android:id="@+id/textView77"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Kategoria:"
+                    android:textColor="@color/mainColor"
+                    android:textSize="15dp"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/addCategoryBase"
+                    android:layout_width="230dp"
+                    android:layout_height="30dp"
+                    android:background="@drawable/edit_text_border_dark"
+                    android:ems="10"
+                    android:paddingLeft="20dp"
+                    android:hint="@string/hint_category"
+                    android:inputType="text"
+                    android:textSize="15dp"
+                    android:textColor="@color/mainColor"
+                    android:textColorHint="@color/mainColor" />
+
+
+            </LinearLayout>
+            <Button
+                android:id="@+id/addCatBtn"
+                android:layout_width="80dp"
+                android:layout_height="30dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/custom_button_dark"
+                android:text="@string/btn_submit"
+                android:textAllCaps="false"
+                android:textColor="@color/mainColor" />
+
+        </LinearLayout>
 
 
             <LinearLayout
