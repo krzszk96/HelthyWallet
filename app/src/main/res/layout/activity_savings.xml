@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Savings"
+    android:background="@color/mainColor">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@android:color/white"
+        android:orientation="horizontal"
+        android:gravity="center">
+        <ImageView
+            android:id="@+id/imageView5"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginLeft="10dp"
+            android:src="@drawable/walleticon" />
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Healthy Wallet"
+            android:textColor="@color/mainColor"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            android:paddingLeft="20dp"/>
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="60dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="250dp"
+                android:layout_margin="20dp"
+                android:background="@drawable/chart_background"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:text="Dodaj lokate:"
+                    android:textColor="@color/mainColor"
+                    android:textSize="15dp"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="30dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/textView44"
+                        android:layout_width="50dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Tytuł:"
+                        android:textColor="@color/mainColor"
+                        android:textSize="15dp"
+                        android:textStyle="bold" />
+                    <EditText
+                        android:id="@+id/addTitleDraw"
+                        android:layout_width="210dp"
+                        android:layout_height="30dp"
+                        android:background="@drawable/edit_text_border_dark"
+                        android:ems="10"
+                        android:paddingLeft="20dp"
+                        android:hint="@string/hint_title"
+                        android:inputType="text"
+                        android:textSize="15dp"
+                        android:textColor="@color/mainColor"
+                        android:textColorHint="@color/mainColor" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/textView41"
+                        android:layout_width="50dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Kwota:"
+                        android:textColor="@color/mainColor"
+                        android:textSize="15dp"
+                        android:textStyle="bold" />
+                    <EditText
+                        android:id="@+id/addAmountDraw"
+                        android:layout_width="210dp"
+                        android:layout_height="30dp"
+                        android:background="@drawable/edit_text_border_dark"
+                        android:ems="10"
+                        android:paddingLeft="20dp"
+                        android:hint="Wpisz kwotę"
+                        android:inputType="text"
+                        android:textSize="15dp"
+                        android:textColor="@color/mainColor"
+                        android:textColorHint="@color/mainColor" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/textView45"
+                        android:layout_width="50dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Okres:"
+                        android:textColor="@color/mainColor"
+                        android:textSize="15dp"
+                        android:textStyle="bold" />
+                    <EditText
+                        android:id="@+id/addTimeDraw"
+                        android:layout_width="210dp"
+                        android:layout_height="30dp"
+                        android:background="@drawable/edit_text_border_dark"
+                        android:ems="10"
+                        android:paddingLeft="20dp"
+                        android:hint="Wpisz okres"
+                        android:inputType="text"
+                        android:textSize="15dp"
+                        android:textColor="@color/mainColor"
+                        android:textColorHint="@color/mainColor" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/textView46"
+                        android:layout_width="50dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Odsetki:"
+                        android:textColor="@color/mainColor"
+                        android:textSize="15dp"
+                        android:textStyle="bold" />
+                    <EditText
+                        android:id="@+id/addInterestDraw"
+                        android:layout_width="210dp"
+                        android:layout_height="30dp"
+                        android:background="@drawable/edit_text_border_dark"
+                        android:ems="10"
+                        android:paddingLeft="20dp"
+                        android:hint="Wpisz odsetki"
+                        android:inputType="text"
+                        android:textSize="15dp"
+                        android:textColor="@color/mainColor"
+                        android:textColorHint="@color/mainColor" />
+                </LinearLayout>
+                <Button
+                    android:id="@+id/addDataBtn"
+                    android:layout_width="80dp"
+                    android:layout_height="30dp"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/custom_button_dark"
+                    android:text="@string/btn_submit"
+                    android:textAllCaps="false"
+                    android:textColor="@color/mainColor" />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+</RelativeLayout>

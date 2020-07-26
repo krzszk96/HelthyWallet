@@ -30,6 +30,11 @@ public class MainScreen extends AppCompatActivity {
                 startActivity(new Intent(MainScreen.this, MainViewChart.class));
             }
         });
-
+        wallet_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainScreen.this, Wallet.class));
+            }
+        });
     }
 }

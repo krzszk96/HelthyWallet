@@ -32,7 +32,7 @@
                 android:layout_height="wrap_content"
                 android:text="Healthy Wallet"
                 android:textColor="@color/mainColor"
-                android:textSize="55sp"
+                android:textSize="50sp"
                 android:textStyle="bold"
                 android:textAlignment="center"
                 android:paddingTop="20dp"/>

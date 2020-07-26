@@ -52,6 +52,8 @@ public class MainActivity extends AppCompatActivity {
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                entMail.setText("test1@test.com"); //temp test login
+                entPassw.setText("test123");       //temp test login
                 loginUser(entMail.getText().toString(), entPassw.getText().toString());
             }
         });
