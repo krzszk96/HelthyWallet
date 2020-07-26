@@ -78,7 +78,7 @@ public class MainViewChart extends AppCompatActivity {
             }
         });
 
-        displayData();
+        displayData2();
 
     }
     public void addCategroy(){
@@ -141,8 +141,8 @@ public class MainViewChart extends AppCompatActivity {
             public void onCancelled(@NonNull DatabaseError databaseError) {}
         });
     }
-    public void displayData(){
-        String ref = FirebaseAuth.getInstance().getCurrentUser().getUid(); /// not used??
+    public void displayData2(){
+        String ref = FirebaseAuth.getInstance().getCurrentUser().getUid();
         reference = FirebaseDatabase.getInstance().getReference("users").child(ref).child("categories");
         seeData = (TextView) findViewById(R.id.viewData);
 

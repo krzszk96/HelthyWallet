@@ -43,7 +43,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="#ffff"
-            android:background="#3A3535"
+            android:background="@drawable/custom_button_menu"
             android:layout_marginTop="50dp"
             android:text="Portfel" />
         <Button
@@ -51,7 +51,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="#ffff"
-            android:background="#3A3535"
+            android:background="@drawable/custom_button_menu"
             android:layout_marginTop="20dp"
             android:text="zarządzanie" />
         <Button
@@ -59,7 +59,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="#ffff"
-            android:background="#3A3535"
+            android:background="@drawable/custom_button_menu"
             android:layout_marginTop="20dp"
             android:text="oszczędności" />
         <Button
@@ -67,7 +67,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="#ffff"
-            android:background="#3A3535"
+            android:background="@drawable/custom_button_menu"
             android:layout_marginTop="20dp"
             android:text="raporty" />
         <Button
@@ -75,7 +75,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="#ffff"
-            android:background="#3A3535"
+            android:background="@drawable/custom_button_menu"
             android:layout_marginTop="20dp"
             android:text="inwestycje" />
         <Button
@@ -83,7 +83,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="#ffff"
-            android:background="#3A3535"
+            android:background="@drawable/custom_button_menu"
             android:layout_marginTop="20dp"
             android:text="ustawienia" />
         <Button
@@ -91,7 +91,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="#ffff"
-            android:background="#3A3535"
+            android:background="@drawable/custom_button_menu"
             android:layout_marginTop="20dp"
             android:text="Wyloguj" />
 

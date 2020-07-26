@@ -56,10 +56,10 @@ public class Wallet extends AppCompatActivity {
                         }
                     }
                 }
-                String dispI = "-" + income + " PLN";
-                String dispE = Double.toString(expense);
-                inc.setText(dispI + " PLN");
-                exp.setText(dispE + " PLN");
+                String dispI = "+" + income + " PLN";
+                String dispE = "-" + expense + " PLN";
+                inc.setText(dispI);
+                exp.setText(dispE);
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {}
