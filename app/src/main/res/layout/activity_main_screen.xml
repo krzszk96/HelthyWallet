@@ -53,7 +53,7 @@
             android:textColor="#ffff"
             android:background="@drawable/custom_button_menu"
             android:layout_marginTop="20dp"
-            android:text="zarządzanie" />
+            android:text="transakcje" />
         <Button
             android:id="@+id/nav_savings"
             android:layout_width="match_parent"

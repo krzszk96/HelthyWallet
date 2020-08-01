@@ -5,13 +5,17 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.database.SQLException;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.LinearLayout.LayoutParams;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -152,6 +156,8 @@ public class MainViewChart extends AppCompatActivity {
 
                 String display = "";
 
+
+
                 for (DataSnapshot children: dataSnapshot.getChildren()){
 
                     long count= children.getChildrenCount();
@@ -160,11 +166,21 @@ public class MainViewChart extends AppCompatActivity {
                         String title = children.child(Integer.toString(i)).child("tytul").getValue().toString();
                         String amount = children.child(Integer.toString(i)).child("kwota").getValue().toString();
                         String date = children.child(Integer.toString(i)).child("data").getValue().toString();
-                        String buff = "K: " + category + " -T:" + title + " -A:" + amount + " -D:" + date + "\n";
-                        display = display + buff;
+                        String buff = category + ":    " + title + "    (" + amount + ")   -  " + date;
+
+                        LinearLayout linearLayout = (LinearLayout) findViewById(R.id.transLayout);
+                        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT ) ;
+                        layoutParams.setMargins( 0 , 0 , 0 , 20 ) ;
+                        TextView text = new TextView(MainViewChart.this);
+                        text.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+                        text.setText(buff);
+                        text.setBackgroundResource(R.drawable.chart_background);
+                        text.setPadding(70, 20, 0, 20);
+                        text.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
+                        text.setTextColor(Color.parseColor("#494444"));
+                        linearLayout.addView(text, layoutParams);
                     }
                 }
-                seeData.setText(display);
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {}
