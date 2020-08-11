@@ -42,5 +42,17 @@ public class MainScreen extends AppCompatActivity {
                 startActivity(new Intent(MainScreen.this, Savings.class));
             }
         });
+        logout_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainScreen.this, MainActivity.class));
+            }
+        });
+        invest_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainScreen.this, Investments.class));
+            }
+        });
     }
 }

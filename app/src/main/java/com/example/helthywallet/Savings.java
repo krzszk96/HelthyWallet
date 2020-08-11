@@ -3,10 +3,13 @@ package com.example.helthywallet;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.graphics.Color;
 import android.os.Bundle;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -70,7 +73,7 @@ public class Savings extends AppCompatActivity {
     public void displayData(){
         String ref = FirebaseAuth.getInstance().getCurrentUser().getUid();
         reference = FirebaseDatabase.getInstance().getReference("users").child(ref).child("deposits");
-        seeData2 = (TextView) findViewById(R.id.showDeposits);
+        //seeData2 = (TextView) findViewById(R.id.showDeposits);
 
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -84,11 +87,23 @@ public class Savings extends AppCompatActivity {
                         String amount = children.child("kwota").getValue().toString();
                         String date = children.child("okres").getValue().toString();
                         String interest = children.child("odsetki").getValue().toString();
-                        String buff = "Lok: " + title + " -A:" +  amount + " -Mies:" + date + " -%:" + interest + "\n";
-                        display1 = display1 + buff;
+                        String buff = title + ":   (" +  amount + ")  /  " + date + " mies /  " + interest + " %";
+                        //display1 = display1 + buff;
+
+                    LinearLayout linearLayout = (LinearLayout) findViewById(R.id.deposLayout);
+                    LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT ) ;
+                    layoutParams.setMargins( 0 , 0 , 0 , 20 ) ;
+                    TextView text = new TextView(Savings.this);
+                    text.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+                    text.setText(buff);
+                    text.setBackgroundResource(R.drawable.chart_background);
+                    text.setPadding(70, 20, 0, 20);
+                    text.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
+                    text.setTextColor(Color.parseColor("#494444"));
+                    linearLayout.addView(text, layoutParams);
 
                 }
-                seeData2.setText(display1);
+                //seeData2.setText(display1);
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {}

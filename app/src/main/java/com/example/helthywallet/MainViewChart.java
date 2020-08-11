@@ -148,15 +148,10 @@ public class MainViewChart extends AppCompatActivity {
     public void displayData2(){
         String ref = FirebaseAuth.getInstance().getCurrentUser().getUid();
         reference = FirebaseDatabase.getInstance().getReference("users").child(ref).child("categories");
-        seeData = (TextView) findViewById(R.id.viewData);
 
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                String display = "";
-
-
 
                 for (DataSnapshot children: dataSnapshot.getChildren()){
 
