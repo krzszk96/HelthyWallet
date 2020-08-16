@@ -156,13 +156,39 @@
                         android:text="Data:" />
 
                     <EditText
-                        android:id="@+id/addDate"
-                        android:layout_width="210dp"
+                        android:id="@+id/addDateD"
+                        android:layout_width="60dp"
+                        android:layout_height="30dp"
+                        android:layout_marginRight="15dp"
+                        android:background="@drawable/edit_text_border_dark"
+                        android:ems="10"
+                        android:paddingLeft="10dp"
+                        android:hint="dzień"
+                        android:inputType="text"
+                        android:textSize="15dp"
+                        android:textColor="@color/mainColor"
+                        android:textColorHint="@color/mainColor" />
+                    <EditText
+                        android:id="@+id/addDateM"
+                        android:layout_width="60dp"
+                        android:layout_height="30dp"
+                        android:layout_marginRight="15dp"
+                        android:background="@drawable/edit_text_border_dark"
+                        android:ems="10"
+                        android:paddingLeft="10dp"
+                        android:hint="mies"
+                        android:inputType="text"
+                        android:textSize="15dp"
+                        android:textColor="@color/mainColor"
+                        android:textColorHint="@color/mainColor" />
+                    <EditText
+                        android:id="@+id/addDateY"
+                        android:layout_width="60dp"
                         android:layout_height="30dp"
                         android:background="@drawable/edit_text_border_dark"
                         android:ems="10"
-                        android:paddingLeft="20dp"
-                        android:hint="Wpisz datę"
+                        android:paddingLeft="10dp"
+                        android:hint="rok"
                         android:inputType="text"
                         android:textSize="15dp"
                         android:textColor="@color/mainColor"

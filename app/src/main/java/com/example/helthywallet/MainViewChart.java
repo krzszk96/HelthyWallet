@@ -39,7 +39,7 @@ import java.util.List;
 
 public class MainViewChart extends AppCompatActivity {
 
-    EditText inAmount, inTitle, inDate, newCat, inAmountV;
+    EditText inAmount, inTitle, newCat, inAmountV, inDateD, inDateM, inDateY;
     TextView seeData;
     Button addTransaction, addData;
     Spinner spinCats;
@@ -58,7 +58,6 @@ public class MainViewChart extends AppCompatActivity {
         inAmountV.setText("-");
         inAmount = (EditText) findViewById(R.id.addAmount);
         inTitle = (EditText) findViewById(R.id.addTitle);
-        inDate = (EditText) findViewById(R.id.addDate);
 
         addTransaction = (Button) findViewById(R.id.addCatBtn);
         addTransaction.setOnClickListener(new View.OnClickListener() {
@@ -121,6 +120,24 @@ public class MainViewChart extends AppCompatActivity {
             public void onCancelled(@NonNull DatabaseError databaseError) {}
         });
     }
+    public boolean dataCheck(){
+        inDateD = (EditText) findViewById(R.id.addDateD);
+        inDateM = (EditText) findViewById(R.id.addDateM);
+        inDateY = (EditText) findViewById(R.id.addDateY);
+        int day, month, year;
+        boolean result = false;
+
+        day = Integer.valueOf(inDateD.getText().toString());
+        month = Integer.valueOf(inDateM.getText().toString());
+        year = Integer.valueOf(inDateY.getText().toString());
+
+        if(day <= 31 && day > 0 ){
+            if(month <= 12 && month > 0 ) {
+                if(year < 2500 && year > 2019 ) result = true;
+            }
+        }
+        return result;
+    }
     public void addTransaction(){
 
         String ref = FirebaseAuth.getInstance().getCurrentUser().getUid();
@@ -133,13 +150,19 @@ public class MainViewChart extends AppCompatActivity {
 
                 long count= dataSnapshot.getChildrenCount();
                 String amount = inAmountV.getText().toString() + inAmount.getText().toString();
-                reference.child(Long.toString(count)).child("tytul").setValue(inTitle.getText().toString());
-                reference.child(Long.toString(count)).child("kwota").setValue(amount);
-                reference.child(Long.toString(count)).child("data").setValue(inDate.getText().toString());
-                inTitle.setText("");
-                inAmount.setText("");
-                inDate.setText("");
-                recreate();
+
+                if(dataCheck()) {
+                    String date = inDateD.getText().toString() + "/" + inDateM.getText().toString() + "/" + inDateY.getText().toString();
+                    reference.child(Long.toString(count)).child("data").setValue(date);
+                    reference.child(Long.toString(count)).child("tytul").setValue(inTitle.getText().toString());
+                    reference.child(Long.toString(count)).child("kwota").setValue(amount);
+                    inTitle.setText("");
+                    inAmount.setText("");
+                    inDateD.setText(""); inDateM.setText(""); inDateY.setText("");
+                    recreate();
+                }else{
+                    Toast.makeText(MainViewChart.this, "zły format daty!", Toast.LENGTH_SHORT).show();
+                }
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {}
