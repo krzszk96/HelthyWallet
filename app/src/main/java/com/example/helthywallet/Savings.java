@@ -7,6 +7,8 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -25,16 +27,22 @@ public class Savings extends AppCompatActivity {
     DatabaseReference reference;
     Button addDeposit;
     TextView seeData2;
+    Animation scaleUp,scaleDown;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_savings);
 
+        scaleUp = AnimationUtils.loadAnimation(this, R.anim.scale_up);
+        scaleDown = AnimationUtils.loadAnimation(this, R.anim.scale_down);
+
         addDeposit = (Button) findViewById(R.id.addDepoBtn);
         addDeposit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                addDeposit.startAnimation(scaleUp);
+                addDeposit.startAnimation(scaleDown);
                 addDeposit();
             }
         });

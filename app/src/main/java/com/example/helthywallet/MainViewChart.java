@@ -11,6 +11,8 @@ import android.provider.ContactsContract;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -49,6 +51,8 @@ public class MainViewChart extends AppCompatActivity {
     ArrayAdapter<String> adapter;
     ArrayList<String> spinnerDatalist;
 
+    Animation scaleUp,scaleDown;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,10 +63,15 @@ public class MainViewChart extends AppCompatActivity {
         inAmount = (EditText) findViewById(R.id.addAmount);
         inTitle = (EditText) findViewById(R.id.addTitle);
 
+        scaleUp = AnimationUtils.loadAnimation(this, R.anim.scale_up);
+        scaleDown = AnimationUtils.loadAnimation(this, R.anim.scale_down);
+
         addTransaction = (Button) findViewById(R.id.addCatBtn);
         addTransaction.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                addTransaction.startAnimation(scaleUp);
+                addTransaction.startAnimation(scaleDown);
                 addCategroy();
             }
         });
@@ -77,6 +86,8 @@ public class MainViewChart extends AppCompatActivity {
         addData.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                addData.startAnimation(scaleUp);
+                addData.startAnimation(scaleDown);
                 addTransaction();
             }
         });

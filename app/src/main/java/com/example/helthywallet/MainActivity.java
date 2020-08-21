@@ -5,7 +5,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -30,6 +33,8 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseDatabase userData;
     private DatabaseReference reference;
 
+    Animation scaleUp,scaleDown;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,12 +43,17 @@ public class MainActivity extends AppCompatActivity {
         entMail = (EditText) findViewById(R.id.logEmail);
         entPassw = (EditText) findViewById(R.id.logPasswd);
 
+        scaleUp = AnimationUtils.loadAnimation(this, R.anim.scale_up);
+        scaleDown = AnimationUtils.loadAnimation(this, R.anim.scale_down);
+
         mAuth = FirebaseAuth.getInstance();
 
         singupBtn = (Button) findViewById(R.id.signUpBtn);
         singupBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                singupBtn.startAnimation(scaleUp);
+                singupBtn.startAnimation(scaleDown);
                 singUpUser(entMail.getText().toString(), entPassw.getText().toString());
             }
         });
@@ -52,6 +62,8 @@ public class MainActivity extends AppCompatActivity {
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                loginBtn.startAnimation(scaleUp);
+                loginBtn.startAnimation(scaleDown);
                 entMail.setText("test1@test.com"); //temp test login
                 entPassw.setText("test123");       //temp test login
                 loginUser(entMail.getText().toString(), entPassw.getText().toString());
