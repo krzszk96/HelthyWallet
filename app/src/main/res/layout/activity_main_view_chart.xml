@@ -48,17 +48,30 @@
                 android:background="@drawable/chart_background"
                 android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/textView2"
-                    android:layout_width="match_parent"
+                <LinearLayout
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="10dp"
-                    android:text="Dodaj pozycję:"
-                    android:textColor="@color/mainColor"
-                    android:textSize="15dp"
-                    android:textStyle="bold" />
+                    android:layout_marginTop="5dp"
+                    android:orientation="horizontal">
+                    <ImageView
+                        android:id="@+id/imageView55"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="5dp"
+                        android:src="@drawable/transaction_icon" />
+                    <TextView
+                        android:id="@+id/textView2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:text="Dodaj pozycję:"
+                        android:textColor="@color/mainColor"
+                        android:textSize="15dp"
+                        android:textStyle="bold" />
+                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -253,17 +266,31 @@
             android:layout_marginRight="20dp"
             android:background="@drawable/chart_background"
             android:orientation="vertical">
-            <TextView
-                android:id="@+id/textView20"
-                android:layout_width="match_parent"
+            <LinearLayout
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
-                android:text="Dodaj kategorie:"
-                android:textColor="@color/mainColor"
-                android:textSize="15dp"
-                android:textStyle="bold" />
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/imageView555"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="5dp"
+                    android:src="@drawable/category_icon" />
+                <TextView
+                    android:id="@+id/textView20"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:text="Dodaj kategorie:"
+                    android:textColor="@color/mainColor"
+                    android:textSize="15dp"
+                    android:textStyle="bold" />
+            </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

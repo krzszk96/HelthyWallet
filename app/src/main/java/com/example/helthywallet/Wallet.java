@@ -191,6 +191,7 @@ public class Wallet extends AppCompatActivity {
                 .guideLineWidth(5)
                 .guideLineMarginStart(0)
                 .pieRadius(350)
+                .autoSize(true)
                 .duration(2000);// draw pie animation duration
 
         mAnimatedPieView.applyConfig(config);

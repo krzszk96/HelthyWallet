@@ -52,7 +52,7 @@
             android:orientation="vertical">
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="45dp"
+            android:layout_height="50dp"
             android:layout_marginRight="20dp"
             android:layout_marginLeft="20dp"
             android:layout_marginTop="20dp"
@@ -64,16 +64,24 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="30dp"
                 android:layout_marginTop="10dp"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:gravity="center">
 
-                <TextView
-                    android:id="@+id/textView22"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Twój portfel:"
-                    android:textColor="@color/mainColor"
-                    android:textSize="18dp"
-                    android:textStyle="bold" />
+
+                    <ImageView
+                        android:id="@+id/imageView551"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:src="@drawable/wallet_small" />
+                    <TextView
+                        android:id="@+id/textView22"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="15dp"
+                        android:text="Twój portfel:"
+                        android:textColor="@color/mainColor"
+                        android:textSize="18dp"
+                        android:textStyle="bold" />
                 <TextView
                     android:id="@+id/accBalance"
                     android:layout_width="wrap_content"
@@ -121,11 +129,18 @@
                     android:layout_marginTop="5dp"
                     android:orientation="horizontal">
 
+                    <ImageView
+                        android:id="@+id/imageView559"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:src="@drawable/invest_icon" />
+
                     <TextView
                         android:id="@+id/textView879"
                         android:layout_width="100dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:layout_marginLeft="15dp"
                         android:text="Inwestycje:"
                         android:textColor="@color/mainColor"
                         android:textSize="18dp"

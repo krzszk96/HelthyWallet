@@ -215,4 +215,14 @@ public class MainViewChart extends AppCompatActivity {
             public void onCancelled(@NonNull DatabaseError databaseError) {}
         });
     }
+
+//    public boolean checkValue(){
+//        boolean result = false;
+//        TextView inValue ;
+//        inValue = (EditText) findViewById(R.id.inValue);
+//        int textToint;
+//        textToint = Integer.parseInt(inValue.getText().toString());
+//        if(textToint>1) result = true;
+//        return result;
+//    }
 }
