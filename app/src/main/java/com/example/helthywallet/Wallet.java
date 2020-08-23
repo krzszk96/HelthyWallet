@@ -9,9 +9,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -30,6 +32,7 @@ public class Wallet extends AppCompatActivity {
     TextView dep, cur, balance, showPerc;
     ImageView menu_btn;
     DatabaseReference reference;
+    DatabaseReference newReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +49,26 @@ public class Wallet extends AppCompatActivity {
 
         displayIncExp();
         displayDep();
+        updateWallet();
 
+    }
+    public void updateWallet(){
+        balance = (TextView) findViewById(R.id.accBalance);
+
+        String ref = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        newReference = FirebaseDatabase.getInstance().getReference("users").child(ref);
+
+        newReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                newReference.child("wallet").setValue(balance.getText().toString());
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
     public void countWallet(double income, double expense){
         balance = (TextView) findViewById(R.id.accBalance);

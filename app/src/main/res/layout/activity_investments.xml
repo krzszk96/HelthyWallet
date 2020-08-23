@@ -17,17 +17,28 @@
             android:id="@+id/imageView5"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:layout_marginLeft="10dp"
             android:src="@drawable/walleticon" />
         <TextView
             android:id="@+id/textView3"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Healthy Wallet"
             android:textColor="@color/mainColor"
             android:textSize="25sp"
             android:textStyle="bold"
-            android:paddingLeft="20dp"/>
+            android:paddingLeft="10dp"/>
+        <ImageView
+            android:id="@+id/imageView553"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginLeft="15dp"
+            android:src="@drawable/user_account_icon" />
+        <ImageView
+            android:id="@+id/image_menu"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginLeft="20dp"
+            android:src="@drawable/menu_btn" />
     </LinearLayout>
 
     <ScrollView
@@ -42,6 +53,51 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/chart_background"
+                android:orientation="vertical">
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal"
+                    android:gravity="center">
+
+                    <ImageView
+                        android:id="@+id/imageView551"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:tint="@color/mainColor"
+                        android:src="@drawable/wallet_small" />
+                    <TextView
+                        android:id="@+id/textView222"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="15dp"
+                        android:text="Twój portfel:"
+                        android:textColor="@color/mainColor"
+                        android:textSize="18dp"
+                        android:textStyle="bold" />
+                    <TextView
+                        android:id="@+id/accBalance"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginLeft="30dp"
+                        android:text="0"
+                        android:textColor="@color/mainColor"
+                        android:textSize="15dp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="100dp"
                 android:layout_margin="20dp"
                 android:background="@drawable/chart_background"
@@ -50,26 +106,27 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
+                    android:layout_marginLeft="20dp"
                     android:orientation="horizontal">
 
-                <ImageView
-                    android:id="@+id/imageView55"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="5dp"
-                    android:src="@drawable/rate_icon" />
-                <TextView
-                    android:id="@+id/textView22"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="10dp"
-                    android:text="Sprawdź kurs walut:"
-                    android:textColor="@color/mainColor"
-                    android:textSize="15dp"
-                    android:textStyle="bold" />
+                    <ImageView
+                        android:id="@+id/imageView55"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_marginTop="5dp"
+                        android:tint="@color/mainColor"
+                        android:src="@drawable/rate_icon" />
+                    <TextView
+                        android:id="@+id/textView22"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:text="Sprawdź kurs walut:"
+                        android:textColor="@color/mainColor"
+                        android:textSize="15dp"
+                        android:textStyle="bold" />
                 </LinearLayout>
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -125,8 +182,150 @@
 
                 </LinearLayout>
 
-
             </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="210dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:background="@drawable/chart_background"
+                android:orientation="vertical">
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/imageView552"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="5dp"
+                        android:tint="@color/mainColor"
+                        android:src="@drawable/transaction_icon" />
+                    <TextView
+                        android:id="@+id/textView2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:text="Dodaj zakup waluty:"
+                        android:textColor="@color/mainColor"
+                        android:textSize="15dp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="30dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/textView44"
+                        android:layout_width="50dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Waluta:"
+                        android:textColor="@color/mainColor"
+                        android:textSize="15dp"
+                        android:textStyle="bold" />
+                    <EditText
+                        android:id="@+id/enterCurrency"
+                        android:layout_width="210dp"
+                        android:layout_height="30dp"
+                        android:background="@drawable/edit_text_border_dark"
+                        android:ems="10"
+                        android:paddingLeft="20dp"
+                        android:hint="Wpisz skrót waluty"
+                        android:inputType="text"
+                        android:textSize="15dp"
+                        android:textColor="@color/mainColor"
+                        android:textColorHint="@color/mainColor" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/textView41"
+                        android:layout_width="50dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Kwota:"
+                        android:textColor="@color/mainColor"
+                        android:textSize="15dp"
+                        android:textStyle="bold" />
+                    <EditText
+                        android:id="@+id/enterCurrencyValue"
+                        android:layout_width="210dp"
+                        android:layout_height="30dp"
+                        android:background="@drawable/edit_text_border_dark"
+                        android:ems="10"
+                        android:paddingLeft="20dp"
+                        android:hint="Wpisz kwotę"
+                        android:inputType="text"
+                        android:textSize="15dp"
+                        android:textColor="@color/mainColor"
+                        android:textColorHint="@color/mainColor" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/textView45"
+                        android:layout_width="50dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Kurs:"
+                        android:textColor="@color/mainColor"
+                        android:textSize="15dp"
+                        android:textStyle="bold" />
+                    <EditText
+                        android:id="@+id/enterCurrencyRate"
+                        android:layout_width="210dp"
+                        android:layout_height="30dp"
+                        android:background="@drawable/edit_text_border_dark"
+                        android:ems="10"
+                        android:paddingLeft="20dp"
+                        android:hint="Wpisz kurs zakupu"
+                        android:inputType="text"
+                        android:textSize="15dp"
+                        android:textColor="@color/mainColor"
+                        android:textColorHint="@color/mainColor" />
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/buyCurrencyBtn"
+                    android:layout_width="80dp"
+                    android:layout_height="30dp"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/custom_button_dark"
+                    android:text="Kup"
+                    android:textAllCaps="false"
+                    android:textColor="@color/mainColor" />
+            </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerCurr"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"/>
+
         </LinearLayout>
     </ScrollView>
 

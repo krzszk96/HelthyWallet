@@ -65,8 +65,8 @@ public class MainScreen extends AppCompatActivity {
         invest_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                logout_btn.startAnimation(scaleUp);
-                logout_btn.startAnimation(scaleDown);
+                invest_btn.startAnimation(scaleUp);
+                invest_btn.startAnimation(scaleDown);
                 startActivity(new Intent(MainScreen.this, Investments.class));
             }
         });

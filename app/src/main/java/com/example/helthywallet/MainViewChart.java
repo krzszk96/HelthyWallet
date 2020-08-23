@@ -4,11 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.database.SQLException;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.provider.ContactsContract;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.animation.Animation;
@@ -16,6 +13,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.Spinner;
@@ -29,22 +27,15 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.nio.Buffer;
+
 import java.util.ArrayList;
-import java.util.List;
 
 public class MainViewChart extends AppCompatActivity {
 
     EditText inAmount, inTitle, newCat, inAmountV, inDateD, inDateM, inDateY;
-    TextView seeData;
     Button addTransaction, addData;
     Spinner spinCats;
+    ImageView menu_btn;
 
     DatabaseReference reference;
     ValueEventListener listener;
@@ -57,6 +48,14 @@ public class MainViewChart extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_view_chart);
+
+        menu_btn = (ImageView) findViewById(R.id.image_menu);
+        menu_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainViewChart.this, MainScreen.class));
+            }
+        });
 
         inAmountV = (EditText) findViewById(R.id.addAmountV);
         inAmountV.setText("-");
