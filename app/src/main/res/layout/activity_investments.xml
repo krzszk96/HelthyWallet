@@ -104,7 +104,7 @@
 
                     <EditText
                         android:id="@+id/chargeAccount"
-                        android:layout_width="140dp"
+                        android:layout_width="120dp"
                         android:layout_height="30dp"
                         android:background="@drawable/edit_text_border_dark"
                         android:ems="10"
@@ -117,7 +117,7 @@
 
                     <Button
                         android:id="@+id/chargeBtn"
-                        android:layout_width="80dp"
+                        android:layout_width="70dp"
                         android:layout_height="30dp"
                         android:layout_marginLeft="10dp"
                         android:background="@drawable/custom_button_dark"
@@ -126,7 +126,7 @@
                         android:textColor="@color/mainColor" />
                     <Button
                         android:id="@+id/withdrawbtn"
-                        android:layout_width="80dp"
+                        android:layout_width="70dp"
                         android:layout_height="30dp"
                         android:layout_marginLeft="10dp"
                         android:background="@drawable/custom_button_dark"
@@ -359,12 +359,34 @@
                     android:textAllCaps="false"
                     android:textColor="@color/mainColor" />
             </LinearLayout>
+            <LinearLayout
+                android:id="@+id/transLayout1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/viewData"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:paddingLeft="20dp"
+                    android:paddingTop="10dp"
+                    android:text="Kupione waluty:"
+                    android:textColor="@android:color/white"
+                    android:textSize="18dp" />
+            </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerCurr"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="20dp"/>
+                android:minHeight="300dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="20dp"/>
 
         </LinearLayout>
     </ScrollView>

@@ -104,7 +104,7 @@
 
                     <EditText
                         android:id="@+id/chargeAccount"
-                        android:layout_width="140dp"
+                        android:layout_width="120dp"
                         android:layout_height="30dp"
                         android:background="@drawable/edit_text_border_dark"
                         android:ems="10"
@@ -117,7 +117,7 @@
 
                     <Button
                         android:id="@+id/chargeBtn"
-                        android:layout_width="80dp"
+                        android:layout_width="70dp"
                         android:layout_height="30dp"
                         android:layout_marginLeft="10dp"
                         android:background="@drawable/custom_button_dark"
@@ -126,7 +126,7 @@
                         android:textColor="@color/mainColor" />
                     <Button
                         android:id="@+id/withdrawbtn"
-                        android:layout_width="80dp"
+                        android:layout_width="70dp"
                         android:layout_height="30dp"
                         android:layout_marginLeft="10dp"
                         android:background="@drawable/custom_button_dark"

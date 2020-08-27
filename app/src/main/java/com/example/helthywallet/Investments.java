@@ -52,8 +52,6 @@ public class Investments extends AppCompatActivity {
     ArrayAdapter<String> adapter;
     Spinner ratesSpinner;
     ImageView menu_btn;
-    //RecyclerView mRecyclerview;
-    //Adapter1 myAdapter;
     Button buyCurrency, chargeBtn, withdrawBtn;
     EditText entValue, entCurrencyName, entCurrencyRate, chargeAccountVal;
 
@@ -63,7 +61,6 @@ public class Investments extends AppCompatActivity {
     //firebase
     private DatabaseReference currencyReference;
     private RecyclerAdapter recyclerAdapter;
-    private Context mContext;
 
     //variables
     private ArrayList<Model> modelsList;
@@ -86,21 +83,6 @@ public class Investments extends AppCompatActivity {
         mQueue = Volley.newRequestQueue(this);
         jsonRates();
 
-        recyclerView = findViewById(R.id.recyclerCurr);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setHasFixedSize(true);
-
-        //firebase
-        //currencyReference = FirebaseDatabase.getInstance().getReference();
-
-        //Arraylist
-        modelsList = new ArrayList<>();
-        //clear arraylist
-        ClearAll();
-        //get data method
-        GetDataFromFirebase();
-
         buyCurrency = (Button) findViewById(R.id.buyCurrencyBtn);
         buyCurrency.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -108,6 +90,18 @@ public class Investments extends AppCompatActivity {
                 buyCurrency();
             }
         });
+
+        recyclerView = findViewById(R.id.recyclerCurr);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setHasFixedSize(true);
+
+        //Arraylist
+        modelsList = new ArrayList<>();
+        //clear arraylist
+        ClearAll();
+        //get data method
+        GetDataFromFirebase();
 
         updateAccount();
 
@@ -135,19 +129,21 @@ public class Investments extends AppCompatActivity {
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                ClearAll();
-                for(DataSnapshot snapshot: dataSnapshot.getChildren()){
-                    Model model = new Model();
-                    model.setName(snapshot.child("nazwa").getValue().toString());
-                    model.setCurrencyValue(Double.parseDouble(snapshot.child("kwota").getValue().toString()));
-                    model.setCurrencyWorthBefore(500.00);
-                    model.setCurrencyWorthNow(600.00);
-                    model.setProfit(100.00);
-                    model.setRate(Double.parseDouble(snapshot.child("kurs").getValue().toString()));
-                    model.setImg(R.drawable.transaction_icon);
+                try {
+                    ClearAll();
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        Model model = new Model();
+                        model.setName(snapshot.child("nazwa").getValue().toString());
+                        model.setCurrencyValue(Double.parseDouble(snapshot.child("kwota").getValue().toString()));
+                        model.setCurrencyWorthBefore(500.00);
+                        model.setCurrencyWorthNow(600.00);
+                        model.setProfit(100.00);
+                        model.setRate(Double.parseDouble(snapshot.child("kurs").getValue().toString()));
+                        model.setImg(R.drawable.transaction_icon);
 
-                    modelsList.add(model);
-                }
+                        modelsList.add(model);
+                    }
+                }catch (Exception e){}
                 recyclerAdapter = new RecyclerAdapter(getApplicationContext(), modelsList);
                 recyclerView.setAdapter(recyclerAdapter);
                 recyclerAdapter.notifyDataSetChanged();
@@ -155,7 +151,7 @@ public class Investments extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                Log.d("TAG", "error");
             }
         });
     }
@@ -255,7 +251,7 @@ public class Investments extends AppCompatActivity {
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
+                ClearAll();
                 long count= dataSnapshot.getChildrenCount();
 
                  reference.child(Long.toString(count)).child("kwota").setValue(entValue.getText().toString());

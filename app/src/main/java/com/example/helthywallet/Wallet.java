@@ -2,6 +2,8 @@ package com.example.helthywallet;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -34,6 +36,15 @@ public class Wallet extends AppCompatActivity {
     DatabaseReference reference,reference1;
     DatabaseReference newReference;
 
+    //widget
+    RecyclerView recyclerView;
+
+    //firebase
+    private RecyclerAdapterWallet recyclerAdapterWallet;
+
+    //variables
+    private ArrayList<WalletModel> modelsList;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,6 +57,11 @@ public class Wallet extends AppCompatActivity {
                 startActivity(new Intent(Wallet.this, MainScreen.class));
             }
         });
+
+        recyclerView = findViewById(R.id.recyclerCat);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setHasFixedSize(true);
 
         displayIncExp();
         displayDep();
@@ -146,54 +162,72 @@ public class Wallet extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                double amount = 0;
-                String display;
-                double percent;
+                    ClearAll();
+                    double amount = 0;
+                    String displayAmount;
+                    double percent;
 
-                for (DataSnapshot children: dataSnapshot.getChildren()){
+                    for (DataSnapshot children : dataSnapshot.getChildren()) {
 
-                    long count= children.getChildrenCount();
-                    String category = children.getKey();
-                    for (int i=0; i< count; i++){
+                        long count = children.getChildrenCount();
+                        String category = children.getKey();
+                        for (int i = 0; i < count; i++) {
 
-                        String amountTemp = children.child(Integer.toString(i)).child("kwota").getValue().toString();
-                        char ch1 = amountTemp.charAt(0);
+                            String amountTemp = children.child(Integer.toString(i)).child("kwota").getValue().toString();
+                            char ch1 = amountTemp.charAt(0);
 
-                        if(i>0){
-                            amount = amount + Double.parseDouble(amountTemp.substring(1));}
-                        else{
-                            amount = Double.parseDouble(amountTemp.substring(1));
-                        }
-                        if(i==count -1){
-                            if(ch1 == '+') {
-                                percent =  Math.round(amount * 100/income) ;
-                                //ArrayList<String> listPieInc = new ArrayList<>(); problems with dynamic pie drawing
-                                //listPieInc.add(Double.toString(amount));
-                            }else{
-                                percent =  Math.round(amount * 100/expense) ;
-                                //ArrayList<String> listPieExp = new ArrayList<>(); problems with dynamic pie drawing
-                                //listPieExp.add(Double.toString(amount));
+                            if (i > 0) {
+                                amount = amount + Double.parseDouble(amountTemp.substring(1));
+                            } else {
+                                amount = Double.parseDouble(amountTemp.substring(1));
                             }
-                            display = category + "  /  " + ch1 + amount + "  /  " + percent + "%" ;
+                            if (i == count - 1) {
+                                if (ch1 == '+') {
+                                    percent = Math.round(amount * 100 / income);
+                                } else {
+                                    percent = Math.round(amount * 100 / expense);
+                                }
+                                displayAmount =  ch1 + String.valueOf(amount) ;
 
-                            LinearLayout linearLayout = (LinearLayout) findViewById(R.id.transLayout1);
-                            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT ) ;
-                            layoutParams.setMargins( 0 , 0 , 0 , 20 ) ;
-                            TextView text = new TextView(Wallet.this);
-                            text.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-                            text.setText(display);
-                            text.setBackgroundResource(R.drawable.chart_background);
-                            text.setPadding(70, 20, 0, 20);
-                            text.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
-                            text.setTextColor(Color.parseColor("#494444"));
-                            linearLayout.addView(text, layoutParams);
+                                WalletModel walletModel = new WalletModel();
+                                walletModel.setCategory(category);
+                                walletModel.setAmount(displayAmount);
+                                walletModel.setPercent(percent);
+                                walletModel.setImg(R.drawable.home_icon);
+
+                                modelsList.add(walletModel);
+
+//                            LinearLayout linearLayout = (LinearLayout) findViewById(R.id.transLayout1);
+//                            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT ) ;
+//                            layoutParams.setMargins( 0 , 0 , 0 , 20 ) ;
+//                            TextView text = new TextView(Wallet.this);
+//                            text.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+//                            text.setText(display);
+//                            text.setBackgroundResource(R.drawable.chart_background);
+//                            text.setPadding(70, 20, 0, 20);
+//                            text.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
+//                            text.setTextColor(Color.parseColor("#494444"));
+//                            linearLayout.addView(text, layoutParams);
+                            }
                         }
                     }
-                }
+                recyclerAdapterWallet = new RecyclerAdapterWallet(getApplicationContext(), modelsList);
+                recyclerView.setAdapter(recyclerAdapterWallet);
+                recyclerAdapterWallet.notifyDataSetChanged();
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {}
         });
+    }
+    private void ClearAll(){
+        if (modelsList != null){
+            modelsList.clear();
+
+            if(recyclerAdapterWallet != null){
+                recyclerAdapterWallet.notifyDataSetChanged();
+            }
+        }
+        modelsList = new ArrayList<>();
     }
     public void displayDep(){
         String ref = FirebaseAuth.getInstance().getCurrentUser().getUid();
