@@ -128,7 +128,8 @@
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="30dp"
                     android:layout_marginTop="5dp"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:gravity="center">
 
                     <ImageView
                         android:id="@+id/imageView559"
@@ -139,13 +140,23 @@
 
                     <TextView
                         android:id="@+id/textView879"
-                        android:layout_width="100dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:layout_marginLeft="15dp"
-                        android:text="Inwestycje:"
+                        android:text="Portfel Inwestycji:"
                         android:textColor="@color/mainColor"
                         android:textSize="18dp"
+                        android:textStyle="bold" />
+                    <TextView
+                        android:id="@+id/accBalanceInvest"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginLeft="30dp"
+                        android:text="0"
+                        android:textColor="@color/mainColor"
+                        android:textSize="15dp"
                         android:textStyle="bold" />
                 </LinearLayout>
                 <LinearLayout

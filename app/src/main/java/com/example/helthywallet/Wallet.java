@@ -29,9 +29,9 @@ import java.util.ArrayList;
 
 public class Wallet extends AppCompatActivity {
 
-    TextView dep, cur, balance, showPerc;
+    TextView dep, cur, balance, showPerc, topUpShow;
     ImageView menu_btn;
-    DatabaseReference reference;
+    DatabaseReference reference,reference1;
     DatabaseReference newReference;
 
     @Override
@@ -50,6 +50,7 @@ public class Wallet extends AppCompatActivity {
         displayIncExp();
         displayDep();
         updateWallet();
+        updateAccount();
 
     }
     public void updateWallet(){
@@ -68,6 +69,25 @@ public class Wallet extends AppCompatActivity {
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
+        });
+    }
+    private void updateAccount(){
+        String ref = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        reference1 = FirebaseDatabase.getInstance().getReference("users").child(ref);
+
+        topUpShow = (TextView) findViewById(R.id.accBalanceInvest);
+
+        reference1.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                if (dataSnapshot.hasChild("investAcc")) {
+                    String valueformdatabase = dataSnapshot.child("investAcc").getValue().toString();
+                    topUpShow.setText(valueformdatabase);
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {}
         });
     }
     public void countWallet(double income, double expense){

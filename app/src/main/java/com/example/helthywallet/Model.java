@@ -1,10 +1,24 @@
 package com.example.helthywallet;
 
-public class Model {
+public class Model { //this is model class for investments recyclerview
 
     private String name;
     private double currencyValue, currencyWorthBefore, currencyWorthNow, profit, rate;
     private int img;
+
+    public Model(){
+
+    }
+
+    public Model(String name,double currencyValue,double currencyWorthBefore,double currencyWorthNow,double profit,double rate,int img){
+        this.name = name;
+        this.currencyValue = currencyValue;
+        this.currencyWorthBefore = currencyWorthBefore;
+        this.currencyWorthNow = currencyWorthNow;
+        this.profit = profit;
+        this.rate = rate;
+        this.img = img;
+    }
 
     public double getCurrencyValue() {
         return currencyValue;
@@ -54,4 +68,5 @@ public class Model {
     public void setName(String name) {
         this.name = name;
     }
+
 }

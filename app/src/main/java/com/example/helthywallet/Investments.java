@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -29,31 +30,45 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Map;
+
 
 public class Investments extends AppCompatActivity {
 
-    TextView curRat;
+    TextView curRat,topUpShow;
     private RequestQueue mQueue;
     ArrayAdapter<String> adapter;
-    ArrayList<String> spinnerDatalist;
     Spinner ratesSpinner;
     ImageView menu_btn;
-    RecyclerView mRecyclerview;
-    Adapter1 myAdapter;
-    Button buyCurrency;
-    EditText entValue, entCurrencyName, entCurrencyRate;
+    //RecyclerView mRecyclerview;
+    //Adapter1 myAdapter;
+    Button buyCurrency, chargeBtn, withdrawBtn;
+    EditText entValue, entCurrencyName, entCurrencyRate, chargeAccountVal;
 
-    DatabaseReference reference;
+    //widget
+    RecyclerView recyclerView;
+
+    //firebase
+    private DatabaseReference currencyReference;
+    private RecyclerAdapter recyclerAdapter;
+    private Context mContext;
+
+    //variables
+    private ArrayList<Model> modelsList;
+
+    DatabaseReference reference,reference1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,11 +86,20 @@ public class Investments extends AppCompatActivity {
         mQueue = Volley.newRequestQueue(this);
         jsonRates();
 
-        mRecyclerview = findViewById(R.id.recyclerCurr);
-        mRecyclerview.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView = findViewById(R.id.recyclerCurr);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setHasFixedSize(true);
 
-        myAdapter = new Adapter1(this, getMyList());
-        mRecyclerview.setAdapter(myAdapter);
+        //firebase
+        //currencyReference = FirebaseDatabase.getInstance().getReference();
+
+        //Arraylist
+        modelsList = new ArrayList<>();
+        //clear arraylist
+        ClearAll();
+        //get data method
+        GetDataFromFirebase();
 
         buyCurrency = (Button) findViewById(R.id.buyCurrencyBtn);
         buyCurrency.setOnClickListener(new View.OnClickListener() {
@@ -85,6 +109,140 @@ public class Investments extends AppCompatActivity {
             }
         });
 
+        updateAccount();
+
+        chargeBtn = (Button) findViewById(R.id.chargeBtn);
+        chargeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                topUpAccount();
+            }
+        });
+        withdrawBtn = (Button) findViewById(R.id.withdrawbtn);
+        withdrawBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                withdrawAccount();
+            }
+        });
+
+    }
+    private void GetDataFromFirebase(){
+        String ref = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        currencyReference = FirebaseDatabase.getInstance().getReference("users").child(ref);
+
+        Query query = currencyReference.child("currencytrasactions");
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                ClearAll();
+                for(DataSnapshot snapshot: dataSnapshot.getChildren()){
+                    Model model = new Model();
+                    model.setName(snapshot.child("nazwa").getValue().toString());
+                    model.setCurrencyValue(Double.parseDouble(snapshot.child("kwota").getValue().toString()));
+                    model.setCurrencyWorthBefore(500.00);
+                    model.setCurrencyWorthNow(600.00);
+                    model.setProfit(100.00);
+                    model.setRate(Double.parseDouble(snapshot.child("kurs").getValue().toString()));
+                    model.setImg(R.drawable.transaction_icon);
+
+                    modelsList.add(model);
+                }
+                recyclerAdapter = new RecyclerAdapter(getApplicationContext(), modelsList);
+                recyclerView.setAdapter(recyclerAdapter);
+                recyclerAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+    private void ClearAll(){
+        if (modelsList != null){
+            modelsList.clear();
+
+            if(recyclerAdapter != null){
+                recyclerAdapter.notifyDataSetChanged();
+            }
+        }
+        modelsList = new ArrayList<>();
+    }
+
+    private void updateAccount(){
+        String ref = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        reference1 = FirebaseDatabase.getInstance().getReference("users").child(ref);
+
+        topUpShow = (TextView) findViewById(R.id.accBalance);
+
+        reference1.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                if (dataSnapshot.hasChild("investAcc")) {
+                    String valueformdatabase = dataSnapshot.child("investAcc").getValue().toString();
+                    topUpShow.setText(valueformdatabase);
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {}
+        });
+    }
+    private void topUpAccount(){
+        String ref = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        reference1 = FirebaseDatabase.getInstance().getReference("users").child(ref).child("investAcc");
+
+        chargeAccountVal = (EditText) findViewById(R.id.chargeAccount);
+        topUpShow = (TextView) findViewById(R.id.accBalance);
+
+        reference1.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                    reference1.setValue(topUpShow.getText().toString());
+                    double investAccBalance = Double.parseDouble(topUpShow.getText().toString());
+                    double operation = Double.parseDouble(chargeAccountVal.getText().toString());
+                    investAccBalance = investAccBalance + operation;
+                    topUpShow.setText(Double.toString(investAccBalance));
+                    reference1.setValue(topUpShow.getText().toString());
+                    chargeAccountVal.setText("");
+
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {}
+        });
+    }
+    private void withdrawAccount(){
+        String ref = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        reference1 = FirebaseDatabase.getInstance().getReference("users").child(ref).child("investAcc");
+
+        chargeAccountVal = (EditText) findViewById(R.id.chargeAccount);
+        topUpShow = (TextView) findViewById(R.id.accBalance);
+
+        reference1.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                double investAccBalance = Double.parseDouble(topUpShow.getText().toString());
+                if(investAccBalance>0) {
+                    double operation = Double.parseDouble(chargeAccountVal.getText().toString());
+                    if(operation>investAccBalance){
+                        Toast.makeText(Investments.this, "Za mało środków na konice", Toast.LENGTH_LONG).show();
+                    }else{
+                        investAccBalance = investAccBalance - operation;
+                        topUpShow.setText(Double.toString(investAccBalance));
+                        reference1.setValue(topUpShow.getText().toString());
+                        chargeAccountVal.setText("");
+                    }
+
+                }else{
+                    Toast.makeText(Investments.this, "Brak środków do wypłacenia", Toast.LENGTH_LONG).show();
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {}
+        });
     }
     private void buyCurrency(){
         String ref = FirebaseAuth.getInstance().getCurrentUser().getUid();
@@ -111,68 +269,6 @@ public class Investments extends AppCompatActivity {
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {}
         });
-    }
-    private void readFromBase(){
-        String ref = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        reference = FirebaseDatabase.getInstance().getReference("users").child(ref).child("currencytrasactions");
-
-        ArrayList<Model> models = new ArrayList<>();
-        Model m = new Model();
-
-        reference.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                for (DataSnapshot children: dataSnapshot.getChildren()){
-
-//                    m.setName(children.child("nazwa").getValue().toString());
-//                    m.setRate(Double.parseDouble(children.child("kurs").getValue().toString()));
-//                    m.setCurrencyValue(Double.parseDouble(children.child("kwota").getValue().toString()));
-//                    m.setCurrencyWorthBefore(500.00); //policzone (kurs * kwota)
-//                    m.setCurrencyWorthNow(600.00); //z jsona
-//                    m.setProfit(100.00); //policzony
-//                    m.setImg(R.drawable.transaction_icon);
-//                    models.add(m);
-                }
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {}
-        });
-    }
-    private ArrayList<Model> getMyList(){
-
-
-        ArrayList<Model> models = new ArrayList<>();
-        Model m = new Model();
-        m.setName("USD"); //z bazy
-        m.setCurrencyValue(100.00); //z bazy
-        m.setCurrencyWorthBefore(500.00); //policzone (kurs * kwota)
-        m.setCurrencyWorthNow(600.00); //z jsona
-        m.setProfit(100.00); //policzony
-        m.setRate(3.7890); //z bazy
-        m.setImg(R.drawable.transaction_icon);
-        models.add(m);
-
-        m = new Model();
-        m.setCurrencyValue(100.00);
-        m.setCurrencyWorthBefore(500.00);
-        m.setCurrencyWorthNow(600.00);
-        m.setProfit(100.00);
-        m.setRate(3.7890);
-        m.setImg(R.drawable.transaction_icon);
-        models.add(m);
-
-        m = new Model();
-        m.setCurrencyValue(100.00);
-        m.setCurrencyWorthBefore(500.00);
-        m.setCurrencyWorthNow(600.00);
-        m.setProfit(100.00);
-        m.setRate(3.7890);
-        m.setImg(R.drawable.transaction_icon);
-        models.add(m);
-
-
-        return models;
     }
     private static DecimalFormat df2 = new DecimalFormat("#.####");
     private void jsonRates() {
@@ -226,3 +322,5 @@ public class Investments extends AppCompatActivity {
 
     }
 }
+
+
