@@ -114,7 +114,7 @@ public class Wallet extends AppCompatActivity {
         String displayBal = Double.toString(accBalance);
 
         if(income<=expense){
-            displayBal = "-" + displayBal + " PLN";
+            displayBal = displayBal + " PLN";
         }else{
             displayBal = "+" + displayBal + " PLN";
         }

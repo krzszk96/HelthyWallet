@@ -305,7 +305,6 @@
                 android:layout_height="match_parent"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
-                android:layout_marginBottom="20dp"
                 android:orientation="vertical">
 
                 <TextView
@@ -316,17 +315,18 @@
                     android:text="Lokaty:"
                     android:textColor="@android:color/white"
                     android:textSize="18dp" />
-                <TextView
-                    android:id="@+id/showDeposits1"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="20dp"
-                    android:paddingTop="10dp"
-                    android:layout_marginBottom="10dp"
-                    android:text="Tytuł / kwota / okres / odsetki"
-                    android:textColor="@android:color/white"
-                    android:textSize="18dp" />
+
+
             </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerDep"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="300dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="20dp"/>
         </LinearLayout>
     </ScrollView>
 

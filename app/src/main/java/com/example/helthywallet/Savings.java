@@ -2,6 +2,8 @@ package com.example.helthywallet;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -24,6 +26,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+
 public class Savings extends AppCompatActivity {
 
     EditText inTitle, inAmount, inTime, inInterest,chargeAccountVal;
@@ -32,6 +36,15 @@ public class Savings extends AppCompatActivity {
     Animation scaleUp,scaleDown;
     ImageView menu_btn;
     TextView topUpShow;
+
+    //widget
+    RecyclerView recyclerView;
+
+    //firebase
+    private RecyclerAdapterDeposits recyclerAdapterDeposits;
+
+    //variables
+    private ArrayList<DepositModel> modelsList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +78,11 @@ public class Savings extends AppCompatActivity {
 
         scaleUp = AnimationUtils.loadAnimation(this, R.anim.scale_up);
         scaleDown = AnimationUtils.loadAnimation(this, R.anim.scale_down);
+
+        recyclerView = findViewById(R.id.recyclerDep);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setHasFixedSize(true);
 
         addDeposit = (Button) findViewById(R.id.addDepoBtn);
         addDeposit.setOnClickListener(new View.OnClickListener() {
@@ -185,7 +203,7 @@ public class Savings extends AppCompatActivity {
                     inInterest.setText("");
                     String updateacc = String.valueOf( checkAcc - checkValue);
                     reference1.child("investAcc").setValue(updateacc);
-                    recreate();
+                    //recreate();
                 }else{
                     Toast.makeText(Savings.this, "Za mało środków na konice", Toast.LENGTH_LONG).show();
                 }
@@ -197,40 +215,59 @@ public class Savings extends AppCompatActivity {
     public void displayData(){
         String ref = FirebaseAuth.getInstance().getCurrentUser().getUid();
         reference = FirebaseDatabase.getInstance().getReference("users").child(ref).child("deposits");
-        //seeData2 = (TextView) findViewById(R.id.showDeposits);
 
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                try {
+                    ClearAll();
 
-                String display1 = "";
+                    for (DataSnapshot children: dataSnapshot.getChildren()){
 
-                for (DataSnapshot children: dataSnapshot.getChildren()){
+                            String title = children.child("tytul").getValue().toString();
+                            String amount = children.child("kwota").getValue().toString();
+                            String date = children.child("okres").getValue().toString();
+                            String interest = children.child("odsetki").getValue().toString();
+                            String buff = title + ":   (" +  amount + ")  /  " + date + " mies /  " + interest + " %";
 
-                        String title = children.child("tytul").getValue().toString();
-                        String amount = children.child("kwota").getValue().toString();
-                        String date = children.child("okres").getValue().toString();
-                        String interest = children.child("odsetki").getValue().toString();
-                        String buff = title + ":   (" +  amount + ")  /  " + date + " mies /  " + interest + " %";
-                        //display1 = display1 + buff;
+                            DepositModel deposit = new DepositModel();
+                            deposit.setTitle(title);
+                            deposit.setAmount(amount);
+                            deposit.setTime(date);
+                            deposit.setInterest(interest);
+                            deposit.setImg(R.drawable.bank_icon);
+                            modelsList.add(deposit);
 
-                    LinearLayout linearLayout = (LinearLayout) findViewById(R.id.deposLayout);
-                    LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT ) ;
-                    layoutParams.setMargins( 0 , 0 , 0 , 20 ) ;
-                    TextView text = new TextView(Savings.this);
-                    text.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-                    text.setText(buff);
-                    text.setBackgroundResource(R.drawable.chart_background);
-                    text.setPadding(70, 20, 0, 20);
-                    text.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
-                    text.setTextColor(Color.parseColor("#494444"));
-                    linearLayout.addView(text, layoutParams);
+//                        LinearLayout linearLayout = (LinearLayout) findViewById(R.id.deposLayout);
+//                        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT ) ;
+//                        layoutParams.setMargins( 0 , 0 , 0 , 20 ) ;
+//                        TextView text = new TextView(Savings.this);
+//                        text.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+//                        text.setText(buff);
+//                        text.setBackgroundResource(R.drawable.chart_background);
+//                        text.setPadding(70, 20, 0, 20);
+//                        text.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
+//                        text.setTextColor(Color.parseColor("#494444"));
+//                        linearLayout.addView(text, layoutParams);
 
-                }
-                //seeData2.setText(display1);
+                    }
+                }catch (Exception e){}
+                recyclerAdapterDeposits = new RecyclerAdapterDeposits(getApplicationContext(), modelsList);
+                recyclerView.setAdapter(recyclerAdapterDeposits);
+                recyclerAdapterDeposits.notifyDataSetChanged();
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {}
         });
+    }
+    private void ClearAll(){
+        if (modelsList != null){
+            modelsList.clear();
+
+            if(recyclerAdapterDeposits != null){
+                recyclerAdapterDeposits.notifyDataSetChanged();
+            }
+        }
+        modelsList = new ArrayList<>();
     }
 }

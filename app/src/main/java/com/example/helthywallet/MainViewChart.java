@@ -2,11 +2,11 @@ package com.example.helthywallet;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.util.TypedValue;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -14,10 +14,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.LinearLayout.LayoutParams;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -44,6 +41,15 @@ public class MainViewChart extends AppCompatActivity {
 
     Animation scaleUp,scaleDown;
 
+    //widget
+    RecyclerView recyclerView;
+
+    //firebase
+    private RecyclerAdapterTransactions recyclerAdapterTransactions;
+
+    //variables
+    private ArrayList<TransactionModel> modelsList;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,6 +70,13 @@ public class MainViewChart extends AppCompatActivity {
 
         scaleUp = AnimationUtils.loadAnimation(this, R.anim.scale_up);
         scaleDown = AnimationUtils.loadAnimation(this, R.anim.scale_down);
+
+        recyclerView = findViewById(R.id.recyclerTransactions);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setHasFixedSize(true);
+
+        displayData2();
 
         addTransaction = (Button) findViewById(R.id.addCatBtn);
         addTransaction.setOnClickListener(new View.OnClickListener() {
@@ -91,7 +104,7 @@ public class MainViewChart extends AppCompatActivity {
             }
         });
 
-        displayData2();
+
 
     }
     public void addCategroy(){
@@ -169,7 +182,6 @@ public class MainViewChart extends AppCompatActivity {
                     inTitle.setText("");
                     inAmount.setText("");
                     inDateD.setText(""); inDateM.setText(""); inDateY.setText("");
-                    recreate();
                 }else{
                     Toast.makeText(MainViewChart.this, "zły format daty!", Toast.LENGTH_SHORT).show();
                 }
@@ -182,46 +194,47 @@ public class MainViewChart extends AppCompatActivity {
         String ref = FirebaseAuth.getInstance().getCurrentUser().getUid();
         reference = FirebaseDatabase.getInstance().getReference("users").child(ref).child("categories");
 
-        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+        reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                try {
+                    ClearAll();
+                    for (DataSnapshot children : dataSnapshot.getChildren()) {
 
-                for (DataSnapshot children: dataSnapshot.getChildren()){
+                        long count = children.getChildrenCount();
+                        for (int i = 0; i < count; i++) {
+                            String category = children.getKey();
+                            String title = children.child(Integer.toString(i)).child("tytul").getValue().toString();
+                            String amount = children.child(Integer.toString(i)).child("kwota").getValue().toString();
+                            String date = children.child(Integer.toString(i)).child("data").getValue().toString();
 
-                    long count= children.getChildrenCount();
-                    for (int i=0; i< count; i++){
-                        String category = children.getKey();
-                        String title = children.child(Integer.toString(i)).child("tytul").getValue().toString();
-                        String amount = children.child(Integer.toString(i)).child("kwota").getValue().toString();
-                        String date = children.child(Integer.toString(i)).child("data").getValue().toString();
-                        String buff = category + ":    " + title + "    (" + amount + ")   -  " + date;
+                            TransactionModel transaction = new TransactionModel();
+                            transaction.setCategory(category);
+                            transaction.setTitle(title);
+                            transaction.setAmount(amount);
+                            transaction.setDate(date);
+                            transaction.setImg(R.drawable.home_icon);
+                            modelsList.add(transaction);
 
-                        LinearLayout linearLayout = (LinearLayout) findViewById(R.id.transLayout);
-                        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT ) ;
-                        layoutParams.setMargins( 0 , 0 , 0 , 20 ) ;
-                        TextView text = new TextView(MainViewChart.this);
-                        text.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
-                        text.setText(buff);
-                        text.setBackgroundResource(R.drawable.chart_background);
-                        text.setPadding(70, 20, 0, 20);
-                        text.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
-                        text.setTextColor(Color.parseColor("#494444"));
-                        linearLayout.addView(text, layoutParams);
+                        }
                     }
-                }
+                }catch (Exception e){}
+                recyclerAdapterTransactions = new RecyclerAdapterTransactions(getApplicationContext(), modelsList);
+                recyclerView.setAdapter(recyclerAdapterTransactions);
+                recyclerAdapterTransactions.notifyDataSetChanged();
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {}
         });
     }
+    private void ClearAll(){
+        if (modelsList != null){
+            modelsList.clear();
 
-//    public boolean checkValue(){
-//        boolean result = false;
-//        TextView inValue ;
-//        inValue = (EditText) findViewById(R.id.inValue);
-//        int textToint;
-//        textToint = Integer.parseInt(inValue.getText().toString());
-//        if(textToint>1) result = true;
-//        return result;
-//    }
+            if(recyclerAdapterTransactions != null){
+                recyclerAdapterTransactions.notifyDataSetChanged();
+            }
+        }
+        modelsList = new ArrayList<>();
+    }
 }

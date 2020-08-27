@@ -19,13 +19,13 @@
             android:orientation="horizontal"
             android:gravity="center">
             <ImageView
-                android:id="@+id/categoryImg"
+                android:id="@+id/depositIcon"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:tint="@color/mainColor"
-                android:src="@drawable/home_icon" />
+                android:src="@drawable/bank_icon" />
             <TextView
-                android:id="@+id/categoryDisplay"
+                android:id="@+id/depositTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
@@ -38,16 +38,25 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="25dp"
-                android:text="Tytuł:"
+                android:text="Kwota:"
                 android:textColor="@color/mainColor"
                 android:textSize="15dp"
                 android:textStyle="bold" />
             <TextView
-                android:id="@+id/titleDisplay"
+                android:id="@+id/depositAmount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
-                android:text="tytuł"
+                android:text="0"
+                android:textColor="@color/mainColor"
+                android:textSize="15dp"
+                android:textStyle="bold" />
+            <TextView
+                android:id="@+id/plntext"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:text="PLN"
                 android:textColor="@color/mainColor"
                 android:textSize="15dp"
                 android:textStyle="bold" />
@@ -59,7 +68,7 @@
                 android:gravity="right">
 
                 <ImageView
-                    android:id="@+id/deleteDepoBtn"
+                    android:id="@+id/addDepoBtn"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_marginLeft="30dp"
@@ -78,16 +87,25 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="15dp"
-                android:text="Kwota: "
+                android:text="Okres: "
                 android:textColor="@color/mainColor"
                 android:textSize="15dp"
                 android:textStyle="bold" />
             <TextView
-                android:id="@+id/amountDisplay"
+                android:id="@+id/timeDisplay"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
-                android:text="100"
+                android:text="0"
+                android:textColor="@color/mainColor"
+                android:textSize="15dp"
+                android:textStyle="bold" />
+            <TextView
+                android:id="@+id/monthstext"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:text="miesięcy"
                 android:textColor="@color/mainColor"
                 android:textSize="15dp"
                 android:textStyle="bold" />
@@ -96,16 +114,25 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="25dp"
-                android:text="Data:"
+                android:text="Odsetki:"
                 android:textColor="@color/mainColor"
                 android:textSize="15dp"
                 android:textStyle="bold" />
             <TextView
-                android:id="@+id/dateDisplay"
+                android:id="@+id/interestDisplay"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
-                android:text="21/8/2020"
+                android:text="0"
+                android:textColor="@color/mainColor"
+                android:textSize="15dp"
+                android:textStyle="bold" />
+            <TextView
+                android:id="@+id/proctext"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:text="%"
                 android:textColor="@color/mainColor"
                 android:textSize="15dp"
                 android:textStyle="bold" />
