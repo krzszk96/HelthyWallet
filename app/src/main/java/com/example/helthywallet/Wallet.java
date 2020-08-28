@@ -132,11 +132,9 @@ public class Wallet extends AppCompatActivity {
                 double expense = 0;
 
                 for (DataSnapshot children: dataSnapshot.getChildren()){
+                    for (DataSnapshot child : children.getChildren()) {
 
-                    long count= children.getChildrenCount();
-                    for (int i=0; i< count; i++){
-
-                        String amount = children.child(Integer.toString(i)).child("kwota").getValue().toString();
+                        String amount = child.child("kwota").getValue().toString();
                         char ch1 = amount.charAt(0);
 
                         if(ch1 == '+'){
@@ -162,55 +160,34 @@ public class Wallet extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                    ClearAll();
-                    double amount = 0;
-                    String displayAmount;
-                    double percent;
+                ClearAll();
+                double amount = 0;
+                double percent = 0;
+                char ch1='-';
 
-                    for (DataSnapshot children : dataSnapshot.getChildren()) {
+                for (DataSnapshot children : dataSnapshot.getChildren()) {
 
-                        long count = children.getChildrenCount();
-                        String category = children.getKey();
-                        for (int i = 0; i < count; i++) {
+                    String category = children.getKey();
 
-                            String amountTemp = children.child(Integer.toString(i)).child("kwota").getValue().toString();
-                            char ch1 = amountTemp.charAt(0);
+                    for (DataSnapshot child1 : children.getChildren()) {
 
-                            if (i > 0) {
-                                amount = amount + Double.parseDouble(amountTemp.substring(1));
-                            } else {
-                                amount = Double.parseDouble(amountTemp.substring(1));
-                            }
-                            if (i == count - 1) {
-                                if (ch1 == '+') {
-                                    percent = Math.round(amount * 100 / income);
-                                } else {
-                                    percent = Math.round(amount * 100 / expense);
-                                }
-                                displayAmount =  ch1 + String.valueOf(amount) ;
-
-                                WalletModel walletModel = new WalletModel();
-                                walletModel.setCategory(category);
-                                walletModel.setAmount(displayAmount);
-                                walletModel.setPercent(percent);
-                                walletModel.setImg(R.drawable.home_icon);
-
-                                modelsList.add(walletModel);
-
-//                            LinearLayout linearLayout = (LinearLayout) findViewById(R.id.transLayout1);
-//                            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT ) ;
-//                            layoutParams.setMargins( 0 , 0 , 0 , 20 ) ;
-//                            TextView text = new TextView(Wallet.this);
-//                            text.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-//                            text.setText(display);
-//                            text.setBackgroundResource(R.drawable.chart_background);
-//                            text.setPadding(70, 20, 0, 20);
-//                            text.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
-//                            text.setTextColor(Color.parseColor("#494444"));
-//                            linearLayout.addView(text, layoutParams);
-                            }
-                        }
+                        String amountTemp = child1.child("kwota").getValue().toString();
+                        ch1 = amountTemp.charAt(0);
+                        amount = amount + Double.parseDouble(amountTemp.substring(1));
                     }
+                    if(ch1=='+') {percent = Math.round(amount * 100 / income);}
+                    if(ch1=='-') {percent = Math.round(amount * 100 / expense);}
+
+                    //add model
+                    String displayAmount = ch1 + String.valueOf(amount);
+                    WalletModel walletModel = new WalletModel();
+                    walletModel.setCategory(category);
+                    walletModel.setAmount(displayAmount);
+                    walletModel.setPercent(percent);
+                    walletModel.setImg(R.drawable.home_icon);
+                    modelsList.add(walletModel);
+                    amount = 0;
+                }
                 recyclerAdapterWallet = new RecyclerAdapterWallet(getApplicationContext(), modelsList);
                 recyclerView.setAdapter(recyclerAdapterWallet);
                 recyclerAdapterWallet.notifyDataSetChanged();
@@ -270,56 +247,6 @@ public class Wallet extends AppCompatActivity {
                 .autoSize(true)
                 .duration(2000);// draw pie animation duration
 
-        mAnimatedPieView.applyConfig(config);
-        mAnimatedPieView.start();
-    }
-    public void drawPieExp(ArrayList pieinfo){
-
-        AnimatedPieView mAnimatedPieView = findViewById(R.id.pieView);
-        AnimatedPieViewConfig config = new AnimatedPieViewConfig();
-
-
-        for (int i=0; i< pieinfo.size(); i++){
-
-        }
-
-        //String desc1 = "+" + income + " PLN";
-        //String desc2 = "-" + expense + " PLN";
-
-        config.startAngle(-90)// Starting angle offset
-                //.addData(new SimplePieInfo(income, Color.parseColor("#00ff00"), desc1))//Data (bean that implements the IPieInfo interface)
-                //.addData(new SimplePieInfo(expense, Color.parseColor("#ff0000"), desc2))
-                .floatExpandAngle(15f)
-                .drawText(true)
-                .textSize(40)
-                .guideLineWidth(5)
-                .guideLineMarginStart(0)
-                .pieRadius(300)
-                .duration(2000);// draw pie animation duration
-
-// The following two sentences can be replace directly 'mAnimatedPieView.start (config); '
-        mAnimatedPieView.applyConfig(config);
-        mAnimatedPieView.start();
-    }
-    public void drawPieInc(double income, double expense){
-
-        AnimatedPieView mAnimatedPieView = findViewById(R.id.pieView);
-        AnimatedPieViewConfig config = new AnimatedPieViewConfig();
-        String desc1 = "+" + income + " PLN";
-        String desc2 = "-" + expense + " PLN";
-
-        config.startAngle(-90)// Starting angle offset
-                .addData(new SimplePieInfo(income, Color.parseColor("#00ff00"), desc1))//Data (bean that implements the IPieInfo interface)
-                .addData(new SimplePieInfo(expense, Color.parseColor("#ff0000"), desc2))
-                .floatExpandAngle(15f)
-                .drawText(true)
-                .textSize(40)
-                .guideLineWidth(5)
-                .guideLineMarginStart(0)
-                .pieRadius(300)
-                .duration(2000);// draw pie animation duration
-
-// The following two sentences can be replace directly 'mAnimatedPieView.start (config); '
         mAnimatedPieView.applyConfig(config);
         mAnimatedPieView.start();
     }
