@@ -17,18 +17,23 @@ public class RecyclerAdapterTransactions extends RecyclerView.Adapter<RecyclerAd
     private static final String Tag = "RecyclerViewTransactions";
     private Context mContext;
     private ArrayList<TransactionModel> modelList;
+    private OnItemClickListener mListener;
 
     public RecyclerAdapterTransactions(Context mContext, ArrayList<TransactionModel> modelList) {
         this.mContext = mContext;
         this.modelList = modelList;
     }
+    public interface OnItemClickListener {
+        void onDeleteClick(int position);
+    }
+    public void setOnItemClickListener(OnItemClickListener listener) {mListener = listener;}
 
     public class ViewHolder extends RecyclerView.ViewHolder{
         //widgets
-        ImageView categoryImg;
+        ImageView categoryImg,deleteImage;
         TextView category,title,amount,date;
 
-        public ViewHolder(@NonNull View itemView) {
+        public ViewHolder(@NonNull View itemView, final OnItemClickListener listener) {
             super(itemView);
 
             category = itemView.findViewById(R.id.categoryDisplay);
@@ -36,6 +41,19 @@ public class RecyclerAdapterTransactions extends RecyclerView.Adapter<RecyclerAd
             amount = itemView.findViewById(R.id.amountDisplay);
             date = itemView.findViewById(R.id.dateDisplay);
             categoryImg = itemView.findViewById(R.id.categoryImg);
+            deleteImage = itemView.findViewById(R.id.deleteDepositBtn);
+
+            deleteImage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(listener != null) {
+                        int position = getAdapterPosition();
+                        if (position != RecyclerView.NO_POSITION){
+                            listener.onDeleteClick(position);
+                        }
+                    }
+                }
+            });
         }
     }
 
@@ -45,7 +63,7 @@ public class RecyclerAdapterTransactions extends RecyclerView.Adapter<RecyclerAd
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.transaction_item,parent, false );
 
-        return new RecyclerAdapterTransactions.ViewHolder(view);
+        return new RecyclerAdapterTransactions.ViewHolder(view, mListener);
     }
 
     @Override

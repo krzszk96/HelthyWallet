@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -104,8 +105,6 @@ public class MainViewChart extends AppCompatActivity {
             }
         });
 
-
-
     }
     public void addCategroy(){
 
@@ -170,15 +169,18 @@ public class MainViewChart extends AppCompatActivity {
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                long count= dataSnapshot.getChildrenCount();
+                int count1=0;
+                for (DataSnapshot children : dataSnapshot.getChildren()){
+                        count1 =  Integer.parseInt(children.getKey());
+                }
+                count1++;
                 String amount = inAmountV.getText().toString() + inAmount.getText().toString();
 
                 if(dataCheck()) {
                     String date = inDateD.getText().toString() + "/" + inDateM.getText().toString() + "/" + inDateY.getText().toString();
-                    reference.child(Long.toString(count)).child("data").setValue(date);
-                    reference.child(Long.toString(count)).child("tytul").setValue(inTitle.getText().toString());
-                    reference.child(Long.toString(count)).child("kwota").setValue(amount);
+                    reference.child(Long.toString(count1)).child("data").setValue(date);
+                    reference.child(Long.toString(count1)).child("tytul").setValue(inTitle.getText().toString());
+                    reference.child(Long.toString(count1)).child("kwota").setValue(amount);
                     inTitle.setText("");
                     inAmount.setText("");
                     inDateD.setText(""); inDateM.setText(""); inDateY.setText("");
@@ -190,23 +192,37 @@ public class MainViewChart extends AppCompatActivity {
             public void onCancelled(@NonNull DatabaseError databaseError) {}
         });
     }
+    public void removeItem(final int position){
+        String ref = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        reference = FirebaseDatabase.getInstance().getReference("users").child(ref).child("categories");
+
+        String category = modelsList.get(position).getCategory();
+        String checkId = modelsList.get(position).getId();
+
+        reference.child(category).child(checkId).removeValue();
+
+        modelsList.remove(position);
+        recyclerAdapterTransactions.notifyItemRemoved(position);
+
+    }
     public void displayData2(){
         String ref = FirebaseAuth.getInstance().getCurrentUser().getUid();
         reference = FirebaseDatabase.getInstance().getReference("users").child(ref).child("categories");
+        Log.d("TAG",  "test1");
 
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 try {
                     ClearAll();
-                    for (DataSnapshot children : dataSnapshot.getChildren()) {
 
-                        long count = children.getChildrenCount();
-                        for (int i = 0; i < count; i++) {
+                    for (DataSnapshot children : dataSnapshot.getChildren()) {
+                        for (DataSnapshot i : children.getChildren()) {
                             String category = children.getKey();
-                            String title = children.child(Integer.toString(i)).child("tytul").getValue().toString();
-                            String amount = children.child(Integer.toString(i)).child("kwota").getValue().toString();
-                            String date = children.child(Integer.toString(i)).child("data").getValue().toString();
+                            String id = i.getKey();
+                            String title = i.child("tytul").getValue().toString();
+                            String amount = i.child("kwota").getValue().toString();
+                            String date = i.child("data").getValue().toString();
 
                             TransactionModel transaction = new TransactionModel();
                             transaction.setCategory(category);
@@ -214,6 +230,7 @@ public class MainViewChart extends AppCompatActivity {
                             transaction.setAmount(amount);
                             transaction.setDate(date);
                             transaction.setImg(R.drawable.home_icon);
+                            transaction.setId(id);
                             modelsList.add(transaction);
 
                         }
@@ -222,6 +239,13 @@ public class MainViewChart extends AppCompatActivity {
                 recyclerAdapterTransactions = new RecyclerAdapterTransactions(getApplicationContext(), modelsList);
                 recyclerView.setAdapter(recyclerAdapterTransactions);
                 recyclerAdapterTransactions.notifyDataSetChanged();
+
+                recyclerAdapterTransactions.setOnItemClickListener(new RecyclerAdapterTransactions.OnItemClickListener() {
+                    @Override
+                    public void onDeleteClick(int position) {
+                        removeItem(position);
+                    }
+                });
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {}

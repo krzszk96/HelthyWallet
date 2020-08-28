@@ -238,18 +238,6 @@ public class Savings extends AppCompatActivity {
                             deposit.setImg(R.drawable.bank_icon);
                             modelsList.add(deposit);
 
-//                        LinearLayout linearLayout = (LinearLayout) findViewById(R.id.deposLayout);
-//                        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT ) ;
-//                        layoutParams.setMargins( 0 , 0 , 0 , 20 ) ;
-//                        TextView text = new TextView(Savings.this);
-//                        text.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-//                        text.setText(buff);
-//                        text.setBackgroundResource(R.drawable.chart_background);
-//                        text.setPadding(70, 20, 0, 20);
-//                        text.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
-//                        text.setTextColor(Color.parseColor("#494444"));
-//                        linearLayout.addView(text, layoutParams);
-
                     }
                 }catch (Exception e){}
                 recyclerAdapterDeposits = new RecyclerAdapterDeposits(getApplicationContext(), modelsList);

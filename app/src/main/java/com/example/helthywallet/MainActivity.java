@@ -54,7 +54,13 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 singupBtn.startAnimation(scaleUp);
                 singupBtn.startAnimation(scaleDown);
-                singUpUser(entMail.getText().toString(), entPassw.getText().toString());
+                String email = entMail.getText().toString();
+                String passwd = entPassw.getText().toString();
+                if (email.equals("") || passwd.equals("")){
+                    Toast.makeText(MainActivity.this, "Nie wpisałeś maila lub hasła.", Toast.LENGTH_SHORT).show();
+                }else{
+                    singUpUser(entMail.getText().toString(), entPassw.getText().toString());
+                }
             }
         });
 
