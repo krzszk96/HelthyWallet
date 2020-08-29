@@ -1,13 +1,16 @@
 package com.example.helthywallet;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -43,17 +46,21 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 
 public class Investments extends AppCompatActivity {
 
-    TextView curRat,topUpShow;
+    TextView curRat,topUpShow, currencyAccount;
     private RequestQueue mQueue;
     ArrayAdapter<String> adapter;
     Spinner ratesSpinner;
     ImageView menu_btn;
     Button buyCurrency, chargeBtn, withdrawBtn;
     EditText entValue, entCurrencyName, entCurrencyRate, chargeAccountVal;
+    double toPassRate;
 
     //widget
     RecyclerView recyclerView;
@@ -121,6 +128,73 @@ public class Investments extends AppCompatActivity {
         });
 
     }
+    public boolean checkConditions(){
+        String name = entCurrencyName.getText().toString();
+        String value = entValue.getText().toString();
+        String rate = entCurrencyRate.getText().toString();
+
+        if(name.equals("")){Toast.makeText(Investments.this, "Wpisz tytuł", Toast.LENGTH_SHORT).show(); return false;}
+        if(value.equals("")){Toast.makeText(Investments.this, "Wpisz znak + lub -", Toast.LENGTH_SHORT).show(); return false;}
+        if(rate.equals("")){Toast.makeText(Investments.this, "Wpisz kwotę transakcji", Toast.LENGTH_SHORT).show(); return false;}
+
+        if(name.length()>3){Toast.makeText(Investments.this, "Zły format nazwy, maks 3 znaki", Toast.LENGTH_SHORT).show(); return false;}
+        ArrayList<String> checkName = new ArrayList<>( Arrays.asList("CAD","HKD","ISK","PHP","DKK","HUF","CZK","AUD","RON","SEK","IDR","INR","BRL","RUB","HRK","JPY",
+                "THB","CHF","SGD","PLN","BGN","TRY","CNY","NOK","NZD","ZAR","USD","MXN","ILS","GBP","KRW","MYR"));
+        if(!checkName.contains(name)){Toast.makeText(Investments.this, "Niestety nie ma takiej waluty w bazie!", Toast.LENGTH_SHORT).show(); return false;};
+        if(!isNumeric(value)){Toast.makeText(Investments.this, "Uwaga tekst zamiast kwoty!", Toast.LENGTH_SHORT).show(); return false;}
+        if(!isNumeric(rate)){Toast.makeText(Investments.this, "Uwaga tekst zamiast kwoty!", Toast.LENGTH_SHORT).show(); return false;}
+
+        return true;
+    }
+    public static boolean isNumeric(String strNum) {
+        if (strNum == null) {
+            return false;
+        }
+        try {
+            double d = Double.parseDouble(strNum);
+        } catch (NumberFormatException nfe) {
+            return false;
+        }
+        return true;
+    }
+    public void sellItem(final int position, final String rate){
+        String ref = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        reference = FirebaseDatabase.getInstance().getReference("users").child(ref).child("currencytrasactions");
+        topUpShow = (TextView) findViewById(R.id.accBalance);
+        currencyAccount = (TextView) findViewById(R.id.currencyWallet);
+
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                String checkId = modelsList.get(position).getId();
+
+                double amount = Double.parseDouble(dataSnapshot.child(checkId).child("kwota").getValue().toString());
+                double rateToD = Double.parseDouble(rate);
+                double boughtValue = modelsList.get(position).getCurrencyWorthBefore();
+
+                double calculateValue = amount * rateToD;
+                double calculateProfit = boughtValue - calculateValue;
+                Toast.makeText(Investments.this, "Profit: " + calculateProfit, Toast.LENGTH_LONG).show();
+
+                double accValue = Double.parseDouble(topUpShow.getText().toString());
+                double accCurrencyValue = Double.parseDouble(currencyAccount.getText().toString());
+
+                double updateInves = accValue + calculateValue;
+                double updateCurrency = accCurrencyValue - boughtValue;
+                reference1.child("investAcc").setValue(String.valueOf(df2.format(updateInves)));
+                reference1.child("currencyWallet").setValue(String.valueOf(df2.format(updateCurrency)));
+
+                updateAccount();
+
+                reference.child(checkId).removeValue();
+                modelsList.remove(position);
+                recyclerAdapter.notifyItemRemoved(position);
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
+    }
     private void GetDataFromFirebase(){
         String ref = FirebaseAuth.getInstance().getCurrentUser().getUid();
         currencyReference = FirebaseDatabase.getInstance().getReference("users").child(ref);
@@ -132,13 +206,22 @@ public class Investments extends AppCompatActivity {
                 try {
                     ClearAll();
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        String name = snapshot.child("nazwa").getValue().toString();
+                        double amount = Double.parseDouble(snapshot.child("kwota").getValue().toString());
+                        double rate = Double.parseDouble(snapshot.child("kurs").getValue().toString());
+                        double worthBefore = amount * rate;
+                        String fixValue = df2.format(worthBefore);
+                        String fixRate = df2.format(rate);
+                        String id = snapshot.getKey();
+
                         Model model = new Model();
-                        model.setName(snapshot.child("nazwa").getValue().toString());
+                        model.setName(name);
                         model.setCurrencyValue(Double.parseDouble(snapshot.child("kwota").getValue().toString()));
-                        model.setCurrencyWorthBefore(500.00);
-                        model.setCurrencyWorthNow(600.00);
-                        model.setProfit(100.00);
-                        model.setRate(Double.parseDouble(snapshot.child("kurs").getValue().toString()));
+                        model.setCurrencyWorthBefore(Double.parseDouble(fixValue));
+                        model.setCurrencyWorthNow(0.00);
+                        model.setProfit(0.00);
+                        model.setRate(Double.parseDouble(fixRate));
+                        model.setId(id);
                         model.setImg(R.drawable.transaction_icon);
 
                         modelsList.add(model);
@@ -147,6 +230,34 @@ public class Investments extends AppCompatActivity {
                 recyclerAdapter = new RecyclerAdapter(getApplicationContext(), modelsList);
                 recyclerView.setAdapter(recyclerAdapter);
                 recyclerAdapter.notifyDataSetChanged();
+
+                recyclerAdapter.setOnItemClickListener(new RecyclerAdapter.OnItemClickListener() {
+                    @Override
+                    public void onDeleteClick(final int position) {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(Investments.this);
+                        builder.setTitle("Sprzedawanie waluty");
+                        builder.setMessage("Wprowadź kurs sprzedaży waluty");
+                        final EditText input = new EditText(Investments.this);
+                        input.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+                        builder.setView(input);
+
+                        builder.setPositiveButton("Sprzedaj", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                                String rate = input.getText().toString();
+                                if(rate.equals("")){Toast.makeText(Investments.this, "wprowadź kurs", Toast.LENGTH_LONG).show();}
+                                if(!rate.equals("")){sellItem(position, rate);}
+                            }
+                        });
+                        builder.setNegativeButton("Wróć", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                            }
+                        });
+                        builder.create().show();
+                    }
+                });
             }
 
             @Override
@@ -165,20 +276,32 @@ public class Investments extends AppCompatActivity {
         }
         modelsList = new ArrayList<>();
     }
-
     private void updateAccount(){
         String ref = FirebaseAuth.getInstance().getCurrentUser().getUid();
         reference1 = FirebaseDatabase.getInstance().getReference("users").child(ref);
 
         topUpShow = (TextView) findViewById(R.id.accBalance);
+        currencyAccount = (TextView) findViewById(R.id.currencyWallet);
 
         reference1.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                 if (dataSnapshot.hasChild("investAcc")) {
-                    String valueformdatabase = dataSnapshot.child("investAcc").getValue().toString();
-                    topUpShow.setText(valueformdatabase);
+                    try {
+                        String valueformdatabase = dataSnapshot.child("investAcc").getValue().toString();
+                        topUpShow.setText(valueformdatabase);
+                    }catch (Exception e){}
+                }else{
+                    reference1.child("investAcc").setValue(0);
+                }
+                if (dataSnapshot.hasChild("currencyWallet")){
+                    try {
+                        String valueCur = dataSnapshot.child("currencyWallet").getValue().toString();
+                        currencyAccount.setText(valueCur);
+                    }catch (Exception e){}
+                }else{
+                    reference1.child("currencyWallet").setValue(0);
                 }
             }
             @Override
@@ -201,7 +324,7 @@ public class Investments extends AppCompatActivity {
                     double operation = Double.parseDouble(chargeAccountVal.getText().toString());
                     investAccBalance = investAccBalance + operation;
                     topUpShow.setText(Double.toString(investAccBalance));
-                    reference1.setValue(topUpShow.getText().toString());
+                    reference1.setValue(df2.format(topUpShow.getText().toString()));
                     chargeAccountVal.setText("");
 
             }
@@ -247,32 +370,57 @@ public class Investments extends AppCompatActivity {
         entValue = (EditText) findViewById(R.id.enterCurrencyValue);
         entCurrencyName = (EditText) findViewById(R.id.enterCurrency);
         entCurrencyRate = (EditText) findViewById(R.id.enterCurrencyRate);
+        topUpShow = (TextView) findViewById(R.id.accBalance);
+        currencyAccount = (TextView) findViewById(R.id.currencyWallet);
+
 
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                ClearAll();
-                long count= dataSnapshot.getChildrenCount();
 
-                 reference.child(Long.toString(count)).child("kwota").setValue(entValue.getText().toString());
-                 reference.child(Long.toString(count)).child("nazwa").setValue(entCurrencyName.getText().toString());
-                 reference.child(Long.toString(count)).child("kurs").setValue(entCurrencyRate.getText().toString());
-                 entValue.setText("");
-                 entCurrencyName.setText("");
-                 entCurrencyRate.setText("");
+                int count1=0;
+                for (DataSnapshot children : dataSnapshot.getChildren()){
+                    count1 =  Integer.parseInt(children.getKey());
+                }
+                count1++;
+
+                double checkAcc = Double.parseDouble(topUpShow.getText().toString());
+                double checkCurAcc = Double.parseDouble(currencyAccount.getText().toString());
+                double checkValue = Double.parseDouble(entValue.getText().toString());
+                double checkRate = Double.parseDouble(entCurrencyRate.getText().toString());
+                double checkBought = checkRate * checkValue;
+                if(checkConditions()) {
+                    if (checkBought <= checkAcc) {
+                        reference.child(Long.toString(count1)).child("kwota").setValue(checkValue);
+                        reference.child(Long.toString(count1)).child("nazwa").setValue(entCurrencyName.getText().toString());
+                        reference.child(Long.toString(count1)).child("kurs").setValue(checkRate);
+                        entValue.setText("");
+                        entCurrencyName.setText("");
+                        entCurrencyRate.setText("");
+
+                        String updateacc = String.valueOf(df2.format((checkAcc - checkBought)));
+                        String updateCurrencyAcc = String.valueOf(df2.format(checkCurAcc + checkBought));
+                        reference1.child("investAcc").setValue(updateacc);
+                        reference1.child("currencyWallet").setValue(updateCurrencyAcc);
+                    } else {
+                        Toast.makeText(Investments.this, "Za mało środków na konice", Toast.LENGTH_LONG).show();
+                    }
+                }
 
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {}
         });
+        updateAccount();
     }
-    private static DecimalFormat df2 = new DecimalFormat("#.####");
+    private static DecimalFormat df2 = new DecimalFormat("#.##");
     private void jsonRates() {
 
         curRat = (TextView) findViewById(R.id.curRate);
         ratesSpinner = (Spinner) findViewById(R.id.rateSpinner);
 
-        ArrayList<String> spinRdata = new ArrayList<>( Arrays.asList("CAD","HKD","ISK","PHP","DKK","HUF","CZK","AUD","RON","SEK","IDR","INR","BRL","RUB","HRK","JPY","THB","CHF","SGD","PLN","BGN","TRY","CNY","NOK","NZD","ZAR","USD","MXN","ILS","GBP","KRW","MYR"));
+        ArrayList<String> spinRdata = new ArrayList<>( Arrays.asList("CAD","HKD","ISK","PHP","DKK","HUF","CZK","AUD","RON",
+                "SEK","IDR","INR","BRL","RUB","HRK","JPY","THB","CHF","SGD","PLN","BGN","TRY","CNY","NOK","NZD","ZAR","USD","MXN","ILS","GBP","KRW","MYR"));
         adapter = new ArrayAdapter<>(Investments.this, android.R.layout.simple_spinner_dropdown_item, spinRdata);
         ratesSpinner.setAdapter(adapter);
 

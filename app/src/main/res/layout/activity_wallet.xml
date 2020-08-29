@@ -146,17 +146,27 @@
                         android:layout_marginLeft="15dp"
                         android:text="Portfel Inwestycji:"
                         android:textColor="@color/mainColor"
-                        android:textSize="18dp"
+                        android:textSize="16dp"
                         android:textStyle="bold" />
                     <TextView
                         android:id="@+id/accBalanceInvest"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:layout_marginLeft="30dp"
+                        android:layout_marginLeft="5dp"
                         android:text="0"
                         android:textColor="@color/mainColor"
-                        android:textSize="15dp"
+                        android:textSize="16dp"
+                        android:textStyle="bold" />
+                    <TextView
+                        android:id="@+id/text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginLeft="5dp"
+                        android:text="PLN"
+                        android:textColor="@color/mainColor"
+                        android:textSize="16dp"
                         android:textStyle="bold" />
                 </LinearLayout>
                 <LinearLayout
@@ -169,7 +179,7 @@
 
                     <TextView
                         android:id="@+id/textView87"
-                        android:layout_width="100dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Lokaty:"
@@ -181,8 +191,18 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:layout_marginLeft="30dp"
+                        android:layout_marginLeft="5dp"
                         android:text="0"
+                        android:textColor="@color/mainColor"
+                        android:textSize="15dp"
+                        android:textStyle="bold" />
+                    <TextView
+                        android:id="@+id/text5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginLeft="5dp"
+                        android:text="PLN"
                         android:textColor="@color/mainColor"
                         android:textSize="15dp"
                         android:textStyle="bold" />
@@ -197,7 +217,7 @@
 
                     <TextView
                         android:id="@+id/textView47"
-                        android:layout_width="100dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Waluty:"
@@ -209,8 +229,18 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:layout_marginLeft="30dp"
+                        android:layout_marginLeft="5dp"
                         android:text="0"
+                        android:textColor="@color/mainColor"
+                        android:textSize="15dp"
+                        android:textStyle="bold" />
+                    <TextView
+                        android:id="@+id/text8"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginLeft="5dp"
+                        android:text="PLN"
                         android:textColor="@color/mainColor"
                         android:textSize="15dp"
                         android:textStyle="bold" />

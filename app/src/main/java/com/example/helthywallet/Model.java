@@ -2,7 +2,7 @@ package com.example.helthywallet;
 
 public class Model { //this is model class for investments recyclerview
 
-    private String name;
+    private String name, id;
     private double currencyValue, currencyWorthBefore, currencyWorthNow, profit, rate;
     private int img;
 
@@ -10,7 +10,7 @@ public class Model { //this is model class for investments recyclerview
 
     }
 
-    public Model(String name,double currencyValue,double currencyWorthBefore,double currencyWorthNow,double profit,double rate,int img){
+    public Model(String name,double currencyValue,double currencyWorthBefore,double currencyWorthNow,double profit,double rate,int img, String id){
         this.name = name;
         this.currencyValue = currencyValue;
         this.currencyWorthBefore = currencyWorthBefore;
@@ -18,6 +18,7 @@ public class Model { //this is model class for investments recyclerview
         this.profit = profit;
         this.rate = rate;
         this.img = img;
+        this.id = id;
     }
 
     public double getCurrencyValue() {
@@ -69,4 +70,10 @@ public class Model { //this is model class for investments recyclerview
         this.name = name;
     }
 
+    public String getId() {
+        return id;
+    }
+    public void setId(String id) {
+        this.id = id;
+    }
 }

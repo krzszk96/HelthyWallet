@@ -27,6 +27,7 @@ import com.razerdp.widget.animatedpieview.AnimatedPieView;
 import com.razerdp.widget.animatedpieview.AnimatedPieViewConfig;
 import com.razerdp.widget.animatedpieview.data.SimplePieInfo;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class Wallet extends AppCompatActivity {
@@ -65,6 +66,7 @@ public class Wallet extends AppCompatActivity {
 
         displayIncExp();
         displayDep();
+        displayCurrency();
         updateWallet();
         updateAccount();
 
@@ -222,8 +224,23 @@ public class Wallet extends AppCompatActivity {
                         String amount = children.child("kwota").getValue().toString();
                         deposits = deposits + Double.parseDouble(amount);
                 }
-                String disp = "+" + deposits + " PLN";
-                dep.setText(disp);
+                dep.setText(String.valueOf(deposits));
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {}
+        });
+    }
+    public void displayCurrency(){
+        String ref = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        reference = FirebaseDatabase.getInstance().getReference("users").child(ref).child("currencyWallet");
+        cur = (TextView) findViewById(R.id.curencies);
+
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                String wallet = dataSnapshot.getValue().toString();
+                cur.setText(wallet);
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {}
@@ -250,4 +267,5 @@ public class Wallet extends AppCompatActivity {
         mAnimatedPieView.applyConfig(config);
         mAnimatedPieView.start();
     }
+    private static DecimalFormat df2 = new DecimalFormat("#.##");
 }

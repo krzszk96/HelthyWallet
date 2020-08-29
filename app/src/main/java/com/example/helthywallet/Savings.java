@@ -112,8 +112,10 @@ public class Savings extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                 if (dataSnapshot.hasChild("investAcc")) {
-                    String valuefromdatabase = dataSnapshot.child("investAcc").getValue().toString();
-                    topUpShow.setText(valuefromdatabase);
+                    try {
+                        String valuefromdatabase = dataSnapshot.child("investAcc").getValue().toString();
+                        topUpShow.setText(valuefromdatabase);
+                    }catch (Exception e){}
                 }else{
                     reference1.child("investAcc").setValue(0);
                 }
@@ -297,10 +299,6 @@ public class Savings extends AppCompatActivity {
                 double calculateProfitGross = (baseAmount * timePeriod * (interest/100)) / 365; //calculate total profit without tax
                 double calculateTax = calculateProfitGross * 0.19;
                 double calculateProfitNet = calculateProfitGross - calculateTax;
-
-                Log.d("TAG", "gross:" + calculateProfitGross);
-                Log.d("TAG1", "tax:" + calculateTax);
-                Log.d("TAG2", "net:" + calculateProfitNet);
 
                 double accValue = Double.parseDouble(topUpShow.getText().toString());
                 double update = accValue + baseAmount + calculateProfitNet; //calculate profit with tax

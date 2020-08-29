@@ -17,7 +17,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="5dp"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:gravity="center">
             <ImageView
                 android:id="@+id/imageView551"
                 android:layout_width="30dp"
@@ -51,15 +52,21 @@
                 android:textColor="@color/mainColor"
                 android:textSize="15dp"
                 android:textStyle="bold" />
-            <Button
-                android:id="@+id/addDepoBtn"
-                android:layout_width="80dp"
-                android:layout_height="30dp"
-                android:layout_marginLeft="30dp"
-                android:background="@drawable/custom_button_dark"
-                android:text="Sprzedaj"
-                android:textAllCaps="false"
-                android:textColor="@color/mainColor" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="right">
+                <Button
+                    android:id="@+id/sellBtn"
+                    android:layout_width="80dp"
+                    android:layout_height="30dp"
+                    android:layout_marginLeft="30dp"
+                    android:background="@drawable/custom_button_dark"
+                    android:text="Sprzedaj"
+                    android:textAllCaps="false"
+                    android:textColor="@color/mainColor" />
+            </LinearLayout>
 
         </LinearLayout>
         <LinearLayout
@@ -85,6 +92,15 @@
                 android:textSize="15dp"
                 android:textStyle="bold" />
             <TextView
+                android:id="@+id/text123"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:text="PLN"
+                android:textColor="@color/mainColor"
+                android:textSize="15dp"
+                android:textStyle="bold" />
+            <TextView
                 android:id="@+id/textView36"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -99,6 +115,15 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
                 android:text="0"
+                android:textColor="@color/mainColor"
+                android:textSize="15dp"
+                android:textStyle="bold" />
+            <TextView
+                android:id="@+id/text1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:text="PLN"
                 android:textColor="@color/mainColor"
                 android:textSize="15dp"
                 android:textStyle="bold" />
@@ -126,6 +151,15 @@
                 android:textSize="15dp"
                 android:textStyle="bold" />
             <TextView
+                android:id="@+id/text5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:text="PLN"
+                android:textColor="@color/mainColor"
+                android:textSize="15dp"
+                android:textStyle="bold" />
+            <TextView
                 android:id="@+id/textView38"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -140,6 +174,15 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
                 android:text="0"
+                android:textColor="@color/mainColor"
+                android:textSize="15dp"
+                android:textStyle="bold" />
+            <TextView
+                android:id="@+id/text6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:text="PLN"
                 android:textColor="@color/mainColor"
                 android:textSize="15dp"
                 android:textStyle="bold" />
