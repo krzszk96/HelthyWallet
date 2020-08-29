@@ -2,19 +2,20 @@ package com.example.helthywallet;
 
 public class DepositModel {
 
-    private String title, amount, time, interest;
+    private String title, amount, time, interest, id;
     int img;
 
     public DepositModel(){
 
     }
 
-    public DepositModel(String title, String amount, String time, String interest, int img) {
+    public DepositModel(String title, String amount, String time, String interest, int img, String id) {
         this.title = title;
         this.amount = amount;
         this.time = time;
         this.interest = interest;
         this.img = img;
+        this.id = id;
     }
 
     public String getTitle() {
@@ -55,5 +56,13 @@ public class DepositModel {
 
     public void setImg(int img) {
         this.img = img;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }

@@ -41,7 +41,7 @@ public class RecyclerAdapterTransactions extends RecyclerView.Adapter<RecyclerAd
             amount = itemView.findViewById(R.id.amountDisplay);
             date = itemView.findViewById(R.id.dateDisplay);
             categoryImg = itemView.findViewById(R.id.categoryImg);
-            deleteImage = itemView.findViewById(R.id.deleteDepositBtn);
+            deleteImage = itemView.findViewById(R.id.deleteTransactionBtn);
 
             deleteImage.setOnClickListener(new View.OnClickListener() {
                 @Override

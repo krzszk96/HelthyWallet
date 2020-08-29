@@ -59,7 +59,7 @@
                 android:gravity="right">
 
                 <ImageView
-                    android:id="@+id/deleteDepositBtn"
+                    android:id="@+id/deleteTransactionBtn"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:src="@drawable/exit_icon"

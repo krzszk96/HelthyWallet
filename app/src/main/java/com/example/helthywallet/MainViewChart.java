@@ -1,10 +1,12 @@
 package com.example.helthywallet;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -68,6 +70,9 @@ public class MainViewChart extends AppCompatActivity {
         inAmountV.setText("-");
         inAmount = (EditText) findViewById(R.id.addAmount);
         inTitle = (EditText) findViewById(R.id.addTitle);
+        inDateD = (EditText) findViewById(R.id.addDateD);
+        inDateM = (EditText) findViewById(R.id.addDateM);
+        inDateY = (EditText) findViewById(R.id.addDateY);
 
         scaleUp = AnimationUtils.loadAnimation(this, R.anim.scale_up);
         scaleDown = AnimationUtils.loadAnimation(this, R.anim.scale_down);
@@ -106,6 +111,43 @@ public class MainViewChart extends AppCompatActivity {
         });
 
     }
+    public boolean checkConditions(){
+        String title = inTitle.getText().toString();
+        String sign = inAmountV.getText().toString();
+        String amount = inAmount.getText().toString();
+        String textD = inDateD.getText().toString();
+        String textM = inDateM.getText().toString();
+        String textY = inDateY.getText().toString();
+
+        if(title.equals("")){Toast.makeText(MainViewChart.this, "Wpisz tytuł", Toast.LENGTH_SHORT).show(); return false;}
+        if(sign.equals("")){Toast.makeText(MainViewChart.this, "Wpisz znak + lub -", Toast.LENGTH_SHORT).show(); return false;}
+        if(amount.equals("")){Toast.makeText(MainViewChart.this, "Wpisz kwotę transakcji", Toast.LENGTH_SHORT).show(); return false;}
+        if(textD.equals("")||textM.equals("")||textY.equals("")){Toast.makeText(MainViewChart.this, "Wpisz pełną datę", Toast.LENGTH_SHORT).show(); return false;}
+
+        int day = Integer.valueOf(textD);
+        int month = Integer.valueOf(textM);
+        int year = Integer.valueOf(textY);
+
+        if(title.length()>=15){Toast.makeText(MainViewChart.this, "Tytuł za długi, maks 15 znaków", Toast.LENGTH_SHORT).show(); return false;}
+        if(sign.length()>1){Toast.makeText(MainViewChart.this, "można wpisać tylko + lub -", Toast.LENGTH_SHORT).show(); return false;}
+        if(!isNumeric(amount)){Toast.makeText(MainViewChart.this, "Uwaga tekst zamiast kwoty!", Toast.LENGTH_SHORT).show(); return false;}
+        if(day > 31 || day < 0 ){Toast.makeText(MainViewChart.this, "Błędny dzień", Toast.LENGTH_SHORT).show(); return false;}
+        if(month > 12 || month < 0 ) {Toast.makeText(MainViewChart.this, "Błędny miesiąc", Toast.LENGTH_SHORT).show(); return false;}
+        if(year > 2500 || year < 2019 ) {Toast.makeText(MainViewChart.this, "Błędny rok", Toast.LENGTH_SHORT).show(); return false;}
+
+        return true;
+    }
+    public static boolean isNumeric(String strNum) {
+        if (strNum == null) {
+            return false;
+        }
+        try {
+            double d = Double.parseDouble(strNum);
+        } catch (NumberFormatException nfe) {
+            return false;
+        }
+        return true;
+    }
     public void addCategroy(){
 
         String ref = FirebaseAuth.getInstance().getCurrentUser().getUid();
@@ -142,24 +184,6 @@ public class MainViewChart extends AppCompatActivity {
             public void onCancelled(@NonNull DatabaseError databaseError) {}
         });
     }
-    public boolean dataCheck(){
-        inDateD = (EditText) findViewById(R.id.addDateD);
-        inDateM = (EditText) findViewById(R.id.addDateM);
-        inDateY = (EditText) findViewById(R.id.addDateY);
-        int day, month, year;
-        boolean result = false;
-
-        day = Integer.valueOf(inDateD.getText().toString());
-        month = Integer.valueOf(inDateM.getText().toString());
-        year = Integer.valueOf(inDateY.getText().toString());
-
-        if(day <= 31 && day > 0 ){
-            if(month <= 12 && month > 0 ) {
-                if(year < 2500 && year > 2019 ) result = true;
-            }
-        }
-        return result;
-    }
     public void addTransaction(){
 
         String ref = FirebaseAuth.getInstance().getCurrentUser().getUid();
@@ -176,7 +200,7 @@ public class MainViewChart extends AppCompatActivity {
                 count1++;
                 String amount = inAmountV.getText().toString() + inAmount.getText().toString();
 
-                if(dataCheck()) {
+                if(checkConditions()) {
                     String date = inDateD.getText().toString() + "/" + inDateM.getText().toString() + "/" + inDateY.getText().toString();
                     reference.child(Long.toString(count1)).child("data").setValue(date);
                     reference.child(Long.toString(count1)).child("tytul").setValue(inTitle.getText().toString());
@@ -184,8 +208,6 @@ public class MainViewChart extends AppCompatActivity {
                     inTitle.setText("");
                     inAmount.setText("");
                     inDateD.setText(""); inDateM.setText(""); inDateY.setText("");
-                }else{
-                    Toast.makeText(MainViewChart.this, "zły format daty!", Toast.LENGTH_SHORT).show();
                 }
             }
             @Override
@@ -232,7 +254,6 @@ public class MainViewChart extends AppCompatActivity {
                             transaction.setImg(R.drawable.home_icon);
                             transaction.setId(id);
                             modelsList.add(transaction);
-
                         }
                     }
                 }catch (Exception e){}
@@ -242,8 +263,24 @@ public class MainViewChart extends AppCompatActivity {
 
                 recyclerAdapterTransactions.setOnItemClickListener(new RecyclerAdapterTransactions.OnItemClickListener() {
                     @Override
-                    public void onDeleteClick(int position) {
-                        removeItem(position);
+                    public void onDeleteClick(final int position) {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(MainViewChart.this);
+                        builder.setTitle("Usuwanie transakcji");
+                        builder.setMessage("Czy na pewno chcesz usunąć wybraną transakcję ?");
+
+                        builder.setPositiveButton("Tak", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                removeItem(position);
+                            }
+                        });
+                        builder.setNegativeButton("Nie", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        });
+                        builder.create().show();
                     }
                 });
             }

@@ -1,13 +1,16 @@
 package com.example.helthywallet;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.animation.Animation;
@@ -26,6 +29,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.security.spec.ECField;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class Savings extends AppCompatActivity {
@@ -107,8 +112,8 @@ public class Savings extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                 if (dataSnapshot.hasChild("investAcc")) {
-                    String valueformdatabase = dataSnapshot.child("investAcc").getValue().toString();
-                    topUpShow.setText(valueformdatabase);
+                    String valuefromdatabase = dataSnapshot.child("investAcc").getValue().toString();
+                    topUpShow.setText(valuefromdatabase);
                 }else{
                     reference1.child("investAcc").setValue(0);
                 }
@@ -172,6 +177,36 @@ public class Savings extends AppCompatActivity {
             public void onCancelled(@NonNull DatabaseError databaseError) {}
         });
     }
+    public static boolean isNumeric(String strNum) {
+        if (strNum == null) {
+            return false;
+        }
+        try {
+            double d = Double.parseDouble(strNum);
+        } catch (NumberFormatException nfe) {
+            return false;
+        }
+        return true;
+    }
+    private boolean checkConditions(){
+        String title = inTitle.getText().toString();
+        String amount = inAmount.getText().toString();
+        String time = inTime.getText().toString();
+        String interest = inInterest.getText().toString();
+
+        if(title.equals("")){Toast.makeText(Savings.this, "Wpisz tytuł lokaty", Toast.LENGTH_LONG).show(); return false;}
+        if(amount.equals("")){Toast.makeText(Savings.this, "Wpisz kwotę lokaty", Toast.LENGTH_LONG).show(); return false;}
+        if(time.equals("")){Toast.makeText(Savings.this, "Wpisz czas trwania lokaty", Toast.LENGTH_LONG).show(); return false;}
+        if(interest.equals("")){Toast.makeText(Savings.this, "Wpisz odsetki lokaty", Toast.LENGTH_LONG).show(); return false;}
+
+        if(title.length()>15){Toast.makeText(Savings.this, "Tytuł jest za długi, maksymalnie 15 znaków", Toast.LENGTH_LONG).show(); return false;}
+        if(!isNumeric(amount)){Toast.makeText(Savings.this, "Wpisana kwota nie jest liczbą", Toast.LENGTH_LONG).show(); return false;}
+        if(!isNumeric(time)){Toast.makeText(Savings.this, "Wpisana kwota nie jest liczbą", Toast.LENGTH_LONG).show(); return false;}
+        if(Integer.parseInt(time)>36524){Toast.makeText(Savings.this, "Wpisana liczba to więcej niż 100 lat", Toast.LENGTH_LONG).show(); return false;}
+        if(!isNumeric(interest)){Toast.makeText(Savings.this, "Wpisane odsetki nie są liczbą, wpisz 4 dla 0.04%", Toast.LENGTH_LONG).show(); return false;}
+
+        return true;
+    }
     public void addDeposit(){
 
         String ref = FirebaseAuth.getInstance().getCurrentUser().getUid();
@@ -188,54 +223,125 @@ public class Savings extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                long count= dataSnapshot.getChildrenCount();
+                int count1=0;
+                for (DataSnapshot children : dataSnapshot.getChildren()){
+                    count1 =  Integer.parseInt(children.getKey());
+                }
+                count1++;
+
                 double checkAcc = Double.parseDouble(topUpShow.getText().toString());
                 double checkValue = Double.parseDouble(inAmount.getText().toString());
-
-                if( checkValue <= checkAcc){
-                    reference.child(Long.toString(count)).child("tytul").setValue(inTitle.getText().toString());
-                    reference.child(Long.toString(count)).child("kwota").setValue(inAmount.getText().toString());
-                    reference.child(Long.toString(count)).child("okres").setValue(inTime.getText().toString());
-                    reference.child(Long.toString(count)).child("odsetki").setValue(inInterest.getText().toString());
-                    inTitle.setText("");
-                    inAmount.setText("");
-                    inTime.setText("");
-                    inInterest.setText("");
-                    String updateacc = String.valueOf( checkAcc - checkValue);
-                    reference1.child("investAcc").setValue(updateacc);
-                    //recreate();
-                }else{
-                    Toast.makeText(Savings.this, "Za mało środków na konice", Toast.LENGTH_LONG).show();
+                if(checkConditions()) {
+                    if (checkValue <= checkAcc) {
+                        reference.child(Long.toString(count1)).child("tytul").setValue(inTitle.getText().toString());
+                        reference.child(Long.toString(count1)).child("kwota").setValue(inAmount.getText().toString());
+                        reference.child(Long.toString(count1)).child("okres").setValue(inTime.getText().toString());
+                        reference.child(Long.toString(count1)).child("odsetki").setValue(inInterest.getText().toString());
+                        inTitle.setText("");
+                        inAmount.setText("");
+                        inTime.setText("");
+                        inInterest.setText("");
+                        String updateacc = String.valueOf(df2.format((checkAcc - checkValue)));
+                        reference1.child("investAcc").setValue(updateacc);
+                    } else {
+                        Toast.makeText(Savings.this, "Za mało środków na konice", Toast.LENGTH_LONG).show();
+                    }
                 }
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {}
         });
+        updateAccount();
     }
-    public void displayData(){
+    public void removeItem(final int position){
         String ref = FirebaseAuth.getInstance().getCurrentUser().getUid();
         reference = FirebaseDatabase.getInstance().getReference("users").child(ref).child("deposits");
+        topUpShow = (TextView) findViewById(R.id.accBalance);
 
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                String checkId = modelsList.get(position).getId();
+
+                double baseAmount = Double.parseDouble(dataSnapshot.child(checkId).child("kwota").getValue().toString());
+                double accValue = Double.parseDouble(topUpShow.getText().toString());
+                double update = accValue + baseAmount;
+                reference1.child("investAcc").setValue(String.valueOf(df2.format(update)));
+                updateAccount();
+
+                reference.child(checkId).removeValue();
+                modelsList.remove(position);
+                recyclerAdapterDeposits.notifyItemRemoved(position);
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
+    }
+    public void endItem(final int position){
+        String ref = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        reference = FirebaseDatabase.getInstance().getReference("users").child(ref).child("deposits");
+        topUpShow = (TextView) findViewById(R.id.accBalance);
+
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                String checkId = modelsList.get(position).getId();
+
+                //kwota * mies na dni * oprocentowanie 0.0x / 365
+
+                double baseAmount = Double.parseDouble(dataSnapshot.child(checkId).child("kwota").getValue().toString());
+                double timePeriod = Double.parseDouble(dataSnapshot.child(checkId).child("okres").getValue().toString());
+                double interest = Double.parseDouble(dataSnapshot.child(checkId).child("odsetki").getValue().toString());
+
+                double calculateProfitGross = (baseAmount * timePeriod * (interest/100)) / 365; //calculate total profit without tax
+                double calculateTax = calculateProfitGross * 0.19;
+                double calculateProfitNet = calculateProfitGross - calculateTax;
+
+                Log.d("TAG", "gross:" + calculateProfitGross);
+                Log.d("TAG1", "tax:" + calculateTax);
+                Log.d("TAG2", "net:" + calculateProfitNet);
+
+                double accValue = Double.parseDouble(topUpShow.getText().toString());
+                double update = accValue + baseAmount + calculateProfitNet; //calculate profit with tax
+                reference1.child("investAcc").setValue(String.valueOf(df2.format(update)));
+                updateAccount();
+
+                reference.child(checkId).removeValue();
+                modelsList.remove(position);
+                recyclerAdapterDeposits.notifyItemRemoved(position);
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
+    }
+    private static DecimalFormat df2 = new DecimalFormat("#.##");
+    public void displayData(){
+        String ref = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        reference = FirebaseDatabase.getInstance().getReference("users").child(ref).child("deposits");
+
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 try {
                     ClearAll();
-
                     for (DataSnapshot children: dataSnapshot.getChildren()){
 
                             String title = children.child("tytul").getValue().toString();
                             String amount = children.child("kwota").getValue().toString();
                             String date = children.child("okres").getValue().toString();
                             String interest = children.child("odsetki").getValue().toString();
-                            String buff = title + ":   (" +  amount + ")  /  " + date + " mies /  " + interest + " %";
+                            String id = children.getKey();
 
+                            //add model
                             DepositModel deposit = new DepositModel();
                             deposit.setTitle(title);
                             deposit.setAmount(amount);
                             deposit.setTime(date);
                             deposit.setInterest(interest);
                             deposit.setImg(R.drawable.bank_icon);
+                            deposit.setId(id);
                             modelsList.add(deposit);
 
                     }
@@ -243,6 +349,29 @@ public class Savings extends AppCompatActivity {
                 recyclerAdapterDeposits = new RecyclerAdapterDeposits(getApplicationContext(), modelsList);
                 recyclerView.setAdapter(recyclerAdapterDeposits);
                 recyclerAdapterDeposits.notifyDataSetChanged();
+
+                recyclerAdapterDeposits.setOnItemClickListener(new RecyclerAdapterDeposits.OnItemClickListener() {
+                    @Override
+                    public void onDeleteClick(final int position) {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(Savings.this);
+                        builder.setTitle("Usuwanie lokaty");
+                        builder.setMessage("Wybierz czy chcesz zakończyć lokatę (obliczenie zysku), czy usunąć lokatę z portfela");
+
+                        builder.setPositiveButton("Usuń", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                removeItem(position);
+                            }
+                        });
+                        builder.setNegativeButton("Zakończ", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                endItem(position);
+                            }
+                        });
+                        builder.create().show();
+                    }
+                });
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {}

@@ -17,18 +17,23 @@ public class RecyclerAdapterDeposits extends RecyclerView.Adapter<RecyclerAdapte
     private static final String Tag = "RecyclerViewTransactions";
     private Context mContext;
     private ArrayList<DepositModel> modelList;
+    private OnItemClickListener mListener;
 
     public RecyclerAdapterDeposits(Context mContext, ArrayList<DepositModel> modelList) {
         this.mContext = mContext;
         this.modelList = modelList;
     }
+    public interface OnItemClickListener {
+        void onDeleteClick(int position);
+    }
+    public void setOnItemClickListener(OnItemClickListener listener) {mListener = listener;}
 
     public class ViewHolder extends RecyclerView.ViewHolder{
         //widgets
-        ImageView depositImg;
+        ImageView depositImg,deleteImg;
         TextView title,amount,time,interest;
 
-        public ViewHolder(@NonNull View itemView) {
+        public ViewHolder(@NonNull View itemView, final OnItemClickListener listener) {
             super(itemView);
 
             title = itemView.findViewById(R.id.depositTitle);
@@ -36,6 +41,19 @@ public class RecyclerAdapterDeposits extends RecyclerView.Adapter<RecyclerAdapte
             time = itemView.findViewById(R.id.timeDisplay);
             interest = itemView.findViewById(R.id.interestDisplay);
             depositImg = itemView.findViewById(R.id.depositIcon);
+            deleteImg = itemView.findViewById(R.id.deleteDeposit);
+
+            deleteImg.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(listener != null) {
+                        int position = getAdapterPosition();
+                        if (position != RecyclerView.NO_POSITION){
+                            listener.onDeleteClick(position);
+                        }
+                    }
+                }
+            });
         }
     }
 
@@ -45,7 +63,7 @@ public class RecyclerAdapterDeposits extends RecyclerView.Adapter<RecyclerAdapte
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.deposit_item,parent, false );
 
-        return new RecyclerAdapterDeposits.ViewHolder(view);
+        return new RecyclerAdapterDeposits.ViewHolder(view, mListener);
     }
 
     @Override
