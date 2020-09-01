@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
                 String email = entMail.getText().toString();
                 String passwd = entPassw.getText().toString();
                 if (email.equals("") || passwd.equals("")){
-                    Toast.makeText(MainActivity.this, "Nie wpisałeś maila lub hasła.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, "Wpisz e-mail i hasło", Toast.LENGTH_SHORT).show();
                 }else{
                     singUpUser(entMail.getText().toString(), entPassw.getText().toString());
                 }
@@ -72,7 +72,11 @@ public class MainActivity extends AppCompatActivity {
                 loginBtn.startAnimation(scaleDown);
                 entMail.setText("test1@test.com"); //temp test login
                 entPassw.setText("test123");       //temp test login
-                loginUser(entMail.getText().toString(), entPassw.getText().toString());
+                if(entMail.getText().toString().equals("") || entPassw.getText().toString().equals("")){
+                    Toast.makeText(MainActivity.this, "Wpisz e-mail i hasło", Toast.LENGTH_LONG).show();
+                }else{
+                    loginUser(entMail.getText().toString(), entPassw.getText().toString());
+                }
             }
         });
     }

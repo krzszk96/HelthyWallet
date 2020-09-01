@@ -33,35 +33,37 @@ import java.util.ArrayList;
 public class MainViewChart extends AppCompatActivity {
 
     EditText inAmount, inTitle, newCat, inAmountV, inDateD, inDateM, inDateY;
-    Button addTransaction, addData;
+    Button addCategory, addData;
     Spinner spinCats;
     ImageView menu_btn;
 
-    DatabaseReference reference;
+    DatabaseReference reference, refSpin, refCat;
     ValueEventListener listener;
     ArrayAdapter<String> adapter;
     ArrayList<String> spinnerDatalist;
 
     Animation scaleUp,scaleDown;
 
-    //widget
-    RecyclerView recyclerView;
+    RecyclerView recyclerView; //widget
 
-    //firebase
-    private RecyclerAdapterTransactions recyclerAdapterTransactions;
+    private RecyclerAdapterTransactions recyclerAdapterTransactions; //firebase
 
-    //variables
-    private ArrayList<TransactionModel> modelsList;
+    private ArrayList<TransactionModel> modelsList; //variables
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_view_chart);
 
+        scaleUp = AnimationUtils.loadAnimation(this, R.anim.scale_up);
+        scaleDown = AnimationUtils.loadAnimation(this, R.anim.scale_down);
+
         menu_btn = (ImageView) findViewById(R.id.image_menu);
         menu_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                menu_btn.startAnimation(scaleUp);
+                menu_btn.startAnimation(scaleDown);
                 startActivity(new Intent(MainViewChart.this, MainScreen.class));
             }
         });
@@ -74,9 +76,6 @@ public class MainViewChart extends AppCompatActivity {
         inDateM = (EditText) findViewById(R.id.addDateM);
         inDateY = (EditText) findViewById(R.id.addDateY);
 
-        scaleUp = AnimationUtils.loadAnimation(this, R.anim.scale_up);
-        scaleDown = AnimationUtils.loadAnimation(this, R.anim.scale_down);
-
         recyclerView = findViewById(R.id.recyclerTransactions);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
@@ -84,13 +83,13 @@ public class MainViewChart extends AppCompatActivity {
 
         displayData2();
 
-        addTransaction = (Button) findViewById(R.id.addCatBtn);
-        addTransaction.setOnClickListener(new View.OnClickListener() {
+        addCategory = (Button) findViewById(R.id.addCatBtn);
+        addCategory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                addTransaction.startAnimation(scaleUp);
-                addTransaction.startAnimation(scaleDown);
-                addCategroy();
+                addCategory.startAnimation(scaleUp);
+                addCategory.startAnimation(scaleDown);
+                addCategory();
             }
         });
 
@@ -109,7 +108,6 @@ public class MainViewChart extends AppCompatActivity {
                 addTransaction();
             }
         });
-
     }
     public boolean checkConditions(){
         String title = inTitle.getText().toString();
@@ -148,19 +146,22 @@ public class MainViewChart extends AppCompatActivity {
         }
         return true;
     }
-    public void addCategroy(){
+    public void addCategory(){
 
         String ref = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        reference = FirebaseDatabase.getInstance().getReference("users").child(ref);
+        refSpin = FirebaseDatabase.getInstance().getReference("users").child(ref);
 
         newCat = (EditText) findViewById(R.id.addCategoryBase);
 
-        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+        refSpin.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                reference.child("categories").child(newCat.getText().toString()).setValue("0");
+                String newCategory = newCat.getText().toString();
+                refSpin.child("categories").child(newCategory).setValue("0");
                 newCat.setText("");
-                recreate();
+                spinnerDatalist.clear();
+                retrieveData();
+                adapter.notifyDataSetChanged();
             }
 
             @Override
@@ -175,7 +176,9 @@ public class MainViewChart extends AppCompatActivity {
         listener = reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                spinnerDatalist.clear();
                 for(DataSnapshot item:dataSnapshot.getChildren()){
+
                     spinnerDatalist.add(item.getKey());
                 }
                 adapter.notifyDataSetChanged();
@@ -188,9 +191,9 @@ public class MainViewChart extends AppCompatActivity {
 
         String ref = FirebaseAuth.getInstance().getCurrentUser().getUid();
         String cat = spinCats.getSelectedItem().toString();
-        reference = FirebaseDatabase.getInstance().getReference("users").child(ref).child("categories").child(cat);
+        refCat = FirebaseDatabase.getInstance().getReference("users").child(ref).child("categories").child(cat);
 
-        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+        refCat.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 int count1=0;
@@ -202,17 +205,21 @@ public class MainViewChart extends AppCompatActivity {
 
                 if(checkConditions()) {
                     String date = inDateD.getText().toString() + "/" + inDateM.getText().toString() + "/" + inDateY.getText().toString();
-                    reference.child(Long.toString(count1)).child("data").setValue(date);
-                    reference.child(Long.toString(count1)).child("tytul").setValue(inTitle.getText().toString());
-                    reference.child(Long.toString(count1)).child("kwota").setValue(amount);
+                    refCat.child(Long.toString(count1)).child("data").setValue(date);
+                    refCat.child(Long.toString(count1)).child("tytul").setValue(inTitle.getText().toString());
+                    refCat.child(Long.toString(count1)).child("kwota").setValue(amount);
                     inTitle.setText("");
                     inAmount.setText("");
                     inDateD.setText(""); inDateM.setText(""); inDateY.setText("");
                 }
+
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {}
         });
+        spinnerDatalist.clear();
+        retrieveData();
+        adapter.notifyDataSetChanged();
     }
     public void removeItem(final int position){
         String ref = FirebaseAuth.getInstance().getCurrentUser().getUid();

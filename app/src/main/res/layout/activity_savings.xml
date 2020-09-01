@@ -29,15 +29,17 @@
             android:paddingLeft="10dp"/>
         <ImageView
             android:id="@+id/imageView55"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
             android:layout_marginLeft="15dp"
+            android:tint="@color/mainColor"
             android:src="@drawable/user_account_icon" />
         <ImageView
             android:id="@+id/image_menu"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
             android:layout_marginLeft="20dp"
+            android:tint="@color/mainColor"
             android:src="@drawable/menu_btn" />
     </LinearLayout>
 

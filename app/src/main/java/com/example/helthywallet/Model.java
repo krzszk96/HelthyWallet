@@ -2,51 +2,34 @@ package com.example.helthywallet;
 
 public class Model { //this is model class for investments recyclerview
 
-    private String name, id;
-    private double currencyValue, currencyWorthBefore, currencyWorthNow, profit, rate;
+    private String name, id, currencyValue, currencyWorthBefore, rate;
     private int img;
 
     public Model(){
 
     }
 
-    public Model(String name,double currencyValue,double currencyWorthBefore,double currencyWorthNow,double profit,double rate,int img, String id){
+    public Model(String name,String currencyValue,String currencyWorthBefore,String rate,int img, String id){
         this.name = name;
         this.currencyValue = currencyValue;
         this.currencyWorthBefore = currencyWorthBefore;
-        this.currencyWorthNow = currencyWorthNow;
-        this.profit = profit;
         this.rate = rate;
         this.img = img;
         this.id = id;
     }
 
-    public double getCurrencyValue() {
+    public String getCurrencyValue() {
         return currencyValue;
     }
-    public void setCurrencyValue(double currencyValue) {
+    public void setCurrencyValue(String currencyValue) {
         this.currencyValue = currencyValue;
     }
 
-    public double getCurrencyWorthBefore() {
+    public String getCurrencyWorthBefore() {
         return currencyWorthBefore;
     }
-    public void setCurrencyWorthBefore(double currencyWorthBefore) {
+    public void setCurrencyWorthBefore(String currencyWorthBefore) {
         this.currencyWorthBefore = currencyWorthBefore;
-    }
-
-    public double getCurrencyWorthNow() {
-        return currencyWorthNow;
-    }
-    public void setCurrencyWorthNow(double currencyWorthNow) {
-        this.currencyWorthNow = currencyWorthNow;
-    }
-
-    public double getProfit() {
-        return profit;
-    }
-    public void setProfit(double profit) {
-        this.profit = profit;
     }
 
     public int getImg() {
@@ -56,10 +39,10 @@ public class Model { //this is model class for investments recyclerview
         this.img = img;
     }
 
-    public double getRate() {
+    public String getRate() {
         return rate;
     }
-    public void setRate(double rate) {
+    public void setRate(String rate) {
         this.rate = rate;
     }
 

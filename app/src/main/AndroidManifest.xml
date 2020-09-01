@@ -11,7 +11,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".CurrencyAdapter"></activity>
+        <activity android:name=".Settings"></activity>
+        <activity android:name=".Reports" />
+        <activity android:name=".CurrencyAdapter" />
         <activity android:name=".Investments" />
         <activity android:name=".Savings" />
         <activity android:name=".Wallet" />

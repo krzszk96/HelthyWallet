@@ -34,7 +34,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         //widgets
         Button sellBtn;
         ImageView mImageView;
-        TextView currencyValue, currencyWorthBefore, currencyWorthNow, profit, rate ,CurrencyName;
+        TextView currencyValue, currencyWorthBefore, rate ,CurrencyName;
 
         public ViewHolder(@NonNull View itemView, final RecyclerAdapter.OnItemClickListener listener) {
             super(itemView);
@@ -42,8 +42,6 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
             CurrencyName = itemView.findViewById(R.id.CurrencyName);
             currencyValue = itemView.findViewById(R.id.CurrencyValueDisplay);
             currencyWorthBefore = itemView.findViewById(R.id.currencyWorthBefore);
-            currencyWorthNow = itemView.findViewById(R.id.currencyWorthNow);
-            profit = itemView.findViewById(R.id.profit);
             rate = itemView.findViewById(R.id.rate);
             mImageView = itemView.findViewById(R.id.imageView551);
             sellBtn = itemView.findViewById(R.id.sellBtn);
@@ -68,7 +66,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.model_item,parent, false );
 
-        return new ViewHolder(view, mListener);
+        return new RecyclerAdapter.ViewHolder(view, mListener);
     }
 
     @Override
@@ -76,10 +74,8 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         holder.CurrencyName.setText(modelList.get(position).getName());
         holder.currencyValue.setText(String.valueOf(modelList.get(position).getCurrencyValue()));
         holder.currencyWorthBefore.setText(String.valueOf(modelList.get(position).getCurrencyWorthBefore()));
-        holder.currencyWorthNow.setText(String.valueOf(modelList.get(position).getCurrencyWorthNow()));
-        holder.profit.setText(String.valueOf(modelList.get(position).getProfit()));
         holder.rate.setText(String.valueOf(modelList.get(position).getRate()));
-        holder.mImageView.setImageResource(modelList.get(position).getImg()); //here should be glide library
+        holder.mImageView.setImageResource(modelList.get(position).getImg());
     }
 
     @Override

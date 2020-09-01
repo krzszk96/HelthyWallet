@@ -11,6 +11,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -34,8 +36,9 @@ public class Wallet extends AppCompatActivity {
 
     TextView dep, cur, balance, showPerc, topUpShow;
     ImageView menu_btn;
-    DatabaseReference reference,reference1;
+    DatabaseReference reference,reference1,reference2;
     DatabaseReference newReference;
+    Animation scaleUp,scaleDown;
 
     //widget
     RecyclerView recyclerView;
@@ -51,10 +54,15 @@ public class Wallet extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wallet);
 
+        scaleUp = AnimationUtils.loadAnimation(this, R.anim.scale_up);
+        scaleDown = AnimationUtils.loadAnimation(this, R.anim.scale_down);
+
         menu_btn = (ImageView) findViewById(R.id.image_menu);
         menu_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                menu_btn.startAnimation(scaleUp);
+                menu_btn.startAnimation(scaleDown);
                 startActivity(new Intent(Wallet.this, MainScreen.class));
             }
         });
@@ -115,16 +123,13 @@ public class Wallet extends AppCompatActivity {
         accBalance = income - expense;
         String displayBal = Double.toString(accBalance);
 
-        if(income<=expense){
-            displayBal = displayBal + " PLN";
-        }else{
-            displayBal = "+" + displayBal + " PLN";
-        }
+        if(income>=expense){displayBal = "+" + displayBal;}
         balance.setText(displayBal);
     }
     public void displayIncExp(){
         String ref = FirebaseAuth.getInstance().getCurrentUser().getUid();
         reference = FirebaseDatabase.getInstance().getReference("users").child(ref).child("categories");
+        reference2 = FirebaseDatabase.getInstance().getReference("users").child(ref);
 
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -146,6 +151,8 @@ public class Wallet extends AppCompatActivity {
                         }
                     }
                 }
+                reference2.child("income").setValue(income);
+                reference2.child("expenses").setValue(expense);
                 countWallet(income,expense);
                 drawPie(income,expense);
                 displayCat(income,expense);
@@ -225,6 +232,7 @@ public class Wallet extends AppCompatActivity {
                         deposits = deposits + Double.parseDouble(amount);
                 }
                 dep.setText(String.valueOf(deposits));
+                reference2.child("totalDeposits").setValue(deposits);
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {}
@@ -238,9 +246,11 @@ public class Wallet extends AppCompatActivity {
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                try {
+                    String wallet = dataSnapshot.getValue().toString();
+                    cur.setText(wallet);
+                }catch (Exception e){}
 
-                String wallet = dataSnapshot.getValue().toString();
-                cur.setText(wallet);
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {}
@@ -267,5 +277,4 @@ public class Wallet extends AppCompatActivity {
         mAnimatedPieView.applyConfig(config);
         mAnimatedPieView.start();
     }
-    private static DecimalFormat df2 = new DecimalFormat("#.##");
 }

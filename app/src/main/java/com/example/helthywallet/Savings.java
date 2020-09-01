@@ -55,11 +55,15 @@ public class Savings extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_savings);
+        scaleUp = AnimationUtils.loadAnimation(this, R.anim.scale_up);
+        scaleDown = AnimationUtils.loadAnimation(this, R.anim.scale_down);
 
         menu_btn = (ImageView) findViewById(R.id.image_menu);
         menu_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                menu_btn.startAnimation(scaleUp);
+                menu_btn.startAnimation(scaleDown);
                 startActivity(new Intent(Savings.this, MainScreen.class));
             }
         });
@@ -80,9 +84,6 @@ public class Savings extends AppCompatActivity {
                 withdrawAccount();
             }
         });
-
-        scaleUp = AnimationUtils.loadAnimation(this, R.anim.scale_up);
-        scaleDown = AnimationUtils.loadAnimation(this, R.anim.scale_down);
 
         recyclerView = findViewById(R.id.recyclerDep);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
@@ -139,7 +140,8 @@ public class Savings extends AppCompatActivity {
                 double investAccBalance = Double.parseDouble(topUpShow.getText().toString());
                 double operation = Double.parseDouble(chargeAccountVal.getText().toString());
                 investAccBalance = investAccBalance + operation;
-                topUpShow.setText(Double.toString(investAccBalance));
+                String update = df2.format(investAccBalance);
+                topUpShow.setText(String.valueOf(update));
                 reference1.setValue(topUpShow.getText().toString());
                 chargeAccountVal.setText("");
 
@@ -166,7 +168,8 @@ public class Savings extends AppCompatActivity {
                         Toast.makeText(Savings.this, "Za mało środków na konice", Toast.LENGTH_LONG).show();
                     }else{
                         investAccBalance = investAccBalance - operation;
-                        topUpShow.setText(Double.toString(investAccBalance));
+                        String update = df2.format(investAccBalance);
+                        topUpShow.setText(String.valueOf(update));
                         reference1.setValue(topUpShow.getText().toString());
                         chargeAccountVal.setText("");
                     }

@@ -77,12 +77,6 @@
                     android:textColor="@color/mainColor"
                     android:textSize="15dp"
                     android:textStyle="bold" />
-                <ImageView
-                    android:id="@+id/exitIcon"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:tint="@color/mainColor"
-                    android:src="@drawable/exit_icon" />
             </LinearLayout>
 
         </LinearLayout>
