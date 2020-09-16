@@ -48,6 +48,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -240,10 +241,8 @@ public class Investments extends AppCompatActivity {
 
                         modelsList.add(model);
                     }
-                }catch (Exception e){
-                    Toast.makeText(Investments.this, String.valueOf(e), Toast.LENGTH_LONG).show();
-                    Log.d("TAG", "error: " +e );
-                }
+                }catch (Exception e){}
+
                 recyclerAdapter = new RecyclerAdapter(getApplicationContext(), modelsList);
                 recyclerView.setAdapter(recyclerAdapter);
                 recyclerAdapter.notifyDataSetChanged();
@@ -279,7 +278,7 @@ public class Investments extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Log.d("TAG", "error");
+
             }
         });
     }
@@ -332,9 +331,13 @@ public class Investments extends AppCompatActivity {
         chargeAccountVal = (EditText) findViewById(R.id.chargeAccount);
         topUpShow = (TextView) findViewById(R.id.accBalance);
 
-        reference1.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+        String ifNotEmpty = chargeAccountVal.getText().toString();
+
+        if(!ifNotEmpty.equals("")) {
+
+            reference1.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                     reference1.setValue(topUpShow.getText().toString());
                     double investAccBalance = Double.parseDouble(topUpShow.getText().toString());
@@ -345,10 +348,15 @@ public class Investments extends AppCompatActivity {
                     reference1.setValue(update);
                     chargeAccountVal.setText("");
 
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {}
-        });
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                }
+            });
+        }else {
+            Toast.makeText(Investments.this, "Wpisz kwotę jaką chcesz wpłacić", Toast.LENGTH_LONG).show();
+        }
     }
     private void withdrawAccount(){
         String ref = FirebaseAuth.getInstance().getCurrentUser().getUid();
@@ -357,30 +365,39 @@ public class Investments extends AppCompatActivity {
         chargeAccountVal = (EditText) findViewById(R.id.chargeAccount);
         topUpShow = (TextView) findViewById(R.id.accBalance);
 
-        reference1.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+        String ifNotEmpty = chargeAccountVal.getText().toString();
 
-                double investAccBalance = Double.parseDouble(topUpShow.getText().toString());
-                if(investAccBalance>0) {
-                    double operation = Double.parseDouble(chargeAccountVal.getText().toString());
-                    if(operation>investAccBalance){
-                        Toast.makeText(Investments.this, "Za mało środków na konice", Toast.LENGTH_LONG).show();
-                    }else{
-                        investAccBalance = investAccBalance - operation;
-                        String update = df2.format(investAccBalance);
-                        topUpShow.setText(update);
-                        reference1.setValue(update);
-                        chargeAccountVal.setText("");
+        if(!ifNotEmpty.equals("")) {
+
+            reference1.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                    double investAccBalance = Double.parseDouble(topUpShow.getText().toString());
+                    if (investAccBalance > 0) {
+                        double operation = Double.parseDouble(chargeAccountVal.getText().toString());
+                        if (operation > investAccBalance) {
+                            Toast.makeText(Investments.this, "Za mało środków na konice", Toast.LENGTH_LONG).show();
+                        } else {
+                            investAccBalance = investAccBalance - operation;
+                            String update = df2.format(investAccBalance);
+                            topUpShow.setText(update);
+                            reference1.setValue(update);
+                            chargeAccountVal.setText("");
+                        }
+
+                    } else {
+                        Toast.makeText(Investments.this, "Brak środków do wypłacenia", Toast.LENGTH_LONG).show();
                     }
-
-                }else{
-                    Toast.makeText(Investments.this, "Brak środków do wypłacenia", Toast.LENGTH_LONG).show();
                 }
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {}
-        });
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                }
+            });
+        }else {
+            Toast.makeText(Investments.this, "Wpisz kwotę jaką chcesz wypłacić", Toast.LENGTH_LONG).show();
+        }
     }
     private void buyCurrency(){
         String ref = FirebaseAuth.getInstance().getCurrentUser().getUid();
@@ -402,32 +419,32 @@ public class Investments extends AppCompatActivity {
                     count1 =  Integer.parseInt(children.getKey());
                 }
                 count1++;
+                try {
+                    double checkAcc = Double.parseDouble(topUpShow.getText().toString());
+                    double checkCurAcc = Double.parseDouble(currencyAccount.getText().toString());
+                    double checkValue = Double.parseDouble(entValue.getText().toString());
+                    double checkRate = Double.parseDouble(entCurrencyRate.getText().toString());
+                    double checkBought = checkRate * checkValue;
+                    if (checkConditions()) {
+                        if (checkBought <= checkAcc) {
+                            reference.child(Long.toString(count1)).child("kwota").setValue(checkValue);
+                            reference.child(Long.toString(count1)).child("nazwa").setValue(entCurrencyName.getText().toString());
+                            reference.child(Long.toString(count1)).child("kurs").setValue(checkRate);
+                            entValue.setText("");
+                            entCurrencyName.setText("");
+                            entCurrencyRate.setText("");
 
-                double checkAcc = Double.parseDouble(topUpShow.getText().toString());
-                double checkCurAcc = Double.parseDouble(currencyAccount.getText().toString());
-                double checkValue = Double.parseDouble(entValue.getText().toString());
-                double checkRate = Double.parseDouble(entCurrencyRate.getText().toString());
-                double checkBought = checkRate * checkValue;
-                if(checkConditions()) {
-                    if (checkBought <= checkAcc) {
-                        reference.child(Long.toString(count1)).child("kwota").setValue(checkValue);
-                        reference.child(Long.toString(count1)).child("nazwa").setValue(entCurrencyName.getText().toString());
-                        reference.child(Long.toString(count1)).child("kurs").setValue(checkRate);
-                        entValue.setText("");
-                        entCurrencyName.setText("");
-                        entCurrencyRate.setText("");
-
-                        double acc = checkAcc - checkBought;
-                        String updateacc = df2.format(acc);
-                        double curAcc = checkCurAcc + checkBought;
-                        String updateCurrencyAcc = df2.format(curAcc);
-                        reference1.child("investAcc").setValue(updateacc);
-                        reference1.child("currencyWallet").setValue(updateCurrencyAcc);
-                    } else {
-                        Toast.makeText(Investments.this, "Za mało środków na konice", Toast.LENGTH_LONG).show();
+                            double acc = checkAcc - checkBought;
+                            String updateacc = df2.format(acc);
+                            double curAcc = checkCurAcc + checkBought;
+                            String updateCurrencyAcc = df2.format(curAcc);
+                            reference1.child("investAcc").setValue(updateacc);
+                            reference1.child("currencyWallet").setValue(updateCurrencyAcc);
+                        } else {
+                            Toast.makeText(Investments.this, "Za mało środków na konice", Toast.LENGTH_LONG).show();
+                        }
                     }
-                }
-
+                }catch (Exception e){Log.d("TAG", "test: " + e);}
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {}
@@ -440,16 +457,20 @@ public class Investments extends AppCompatActivity {
         curRat = (TextView) findViewById(R.id.curRate);
         ratesSpinner = (Spinner) findViewById(R.id.rateSpinner);
 
-        ArrayList<String> spinRdata = new ArrayList<>( Arrays.asList("CAD","HKD","ISK","PHP","DKK","HUF","CZK","AUD","RON",
-                "SEK","IDR","INR","BRL","RUB","HRK","JPY","THB","CHF","SGD","PLN","BGN","TRY","CNY","NOK","NZD","ZAR","USD","MXN","ILS","GBP","KRW","MYR"));
-        adapter = new ArrayAdapter<>(Investments.this, android.R.layout.simple_spinner_dropdown_item, spinRdata);
+        ArrayList<String> spinRdata = new ArrayList<>( Arrays.asList("CAD","HKD","ISK","PHP",
+                "DKK", "HUF","CZK","AUD","RON", "SEK","IDR","INR","BRL","RUB","HRK","JPY","THB",
+                "CHF", "SGD","PLN","BGN","TRY","CNY","NOK","NZD","ZAR","USD","MXN","ILS",
+                "GBP","KRW","MYR"));
+        adapter = new ArrayAdapter<>(Investments.this,
+                android.R.layout.simple_spinner_dropdown_item, spinRdata);
         ratesSpinner.setAdapter(adapter);
 
         ratesSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String url = "https://api.exchangeratesapi.io/latest";
-                JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+                JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET,
+                        url, null, new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
@@ -458,11 +479,10 @@ public class Investments extends AppCompatActivity {
                             String spinVal =  ratesSpinner.getSelectedItem().toString();
                             String rateToDisplay = String.valueOf(rate.get(spinVal));
                             String pln = String.valueOf(rate.get("PLN"));
-                            double toPLN = Double.parseDouble(pln) / Double.parseDouble(rateToDisplay);
+                            double toPLN= Double.parseDouble(pln)/Double.parseDouble(rateToDisplay);
                             String display = String.valueOf(df2.format(toPLN));
 
                             curRat.setText(display);
-
                         }catch (JSONException e){
                             e.printStackTrace();
                         }
@@ -474,17 +494,10 @@ public class Investments extends AppCompatActivity {
                     }
                 });
                 mQueue.add(request);
-
             }
-
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
+            public void onNothingSelected(AdapterView<?> parent) {}
         });
-
-
-
     }
 }
 

@@ -70,8 +70,8 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 loginBtn.startAnimation(scaleUp);
                 loginBtn.startAnimation(scaleDown);
-                entMail.setText("test1@test.com"); //temp test login
-                entPassw.setText("test123");       //temp test login
+//                entMail.setText("test2@test.com"); //temp test login
+//                entPassw.setText("test123");       //temp test login
                 if(entMail.getText().toString().equals("") || entPassw.getText().toString().equals("")){
                     Toast.makeText(MainActivity.this, "Wpisz e-mail i hasło", Toast.LENGTH_LONG).show();
                 }else{
@@ -82,15 +82,18 @@ public class MainActivity extends AppCompatActivity {
     }
     public void loginUser(String email, String password){
 
-        mAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+        mAuth.signInWithEmailAndPassword(email,password)
+                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
                     entMail.setText("");
                     entPassw.setText("");
-                    startActivity(new Intent(MainActivity.this, MainScreen.class));
+                    startActivity(new Intent(MainActivity.this,
+                            MainScreen.class));
                 }else{
-                    Toast.makeText(MainActivity.this, task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(MainActivity.this,
+                            task.getException().getMessage(), Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -102,23 +105,24 @@ public class MainActivity extends AppCompatActivity {
 
         String id = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-        //create new user in database
         Users helperClass = new Users(email);
         reference.child(id).setValue(helperClass);
     }
     public void singUpUser(final String email, final String password){
 
-        mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+        mAuth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
                     saveUserData(email);
-                    Toast.makeText(MainActivity.this, "Registration Succesfull!.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this,
+                            "Registration Succesfull!.", Toast.LENGTH_SHORT).show();
                     entMail.setText("");
                     entPassw.setText("");
                 } else {
-                    // If sign in fails, display a message to the user.
-                    Toast.makeText(MainActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this,
+                            task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }
         });

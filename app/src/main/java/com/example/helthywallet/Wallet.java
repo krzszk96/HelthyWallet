@@ -137,19 +137,22 @@ public class Wallet extends AppCompatActivity {
 
                 double income = 0;
                 double expense = 0;
-
+                
                 for (DataSnapshot children: dataSnapshot.getChildren()){
-                    for (DataSnapshot child : children.getChildren()) {
+                        for (DataSnapshot child : children.getChildren()) {
+                           String category = children.getKey();
 
-                        String amount = child.child("kwota").getValue().toString();
-                        char ch1 = amount.charAt(0);
+                            if(!category.equals("catIcon")) {
+                                String amount = child.child("kwota").getValue().toString();
+                                char ch1 = amount.charAt(0);
 
-                        if(ch1 == '+'){
-                            income = income + Double.parseDouble(amount.substring(1));
-                        }else {
-                            expense = expense + Double.parseDouble(amount.substring(1));
+                                if (ch1 == '+') {
+                                    income = income + Double.parseDouble(amount.substring(1));
+                                } else {
+                                    expense = expense + Double.parseDouble(amount.substring(1));
+                                }
+                            }
                         }
-                    }
                 }
                 reference2.child("income").setValue(income);
                 reference2.child("expenses").setValue(expense);
@@ -173,29 +176,42 @@ public class Wallet extends AppCompatActivity {
                 double amount = 0;
                 double percent = 0;
                 char ch1='-';
+                int[] imageArray = {R.drawable.cat_bill_icon, R.drawable.cat_car_icon,
+                        R.drawable.cat_child_icon, R.drawable.cat_family_icon,
+                        R.drawable.cat_food_icon , R.drawable.cat_home_icon,
+                        R.drawable.cat_present_icon , R.drawable.cat_shopping_icon,
+                        R.drawable.cat_work_icon};
 
                 for (DataSnapshot children : dataSnapshot.getChildren()) {
 
                     String category = children.getKey();
+                    if(!category.equals("catIcon")) {
 
-                    for (DataSnapshot child1 : children.getChildren()) {
+                        for (DataSnapshot child1 : children.getChildren()) {
 
-                        String amountTemp = child1.child("kwota").getValue().toString();
-                        ch1 = amountTemp.charAt(0);
-                        amount = amount + Double.parseDouble(amountTemp.substring(1));
+                            String amountTemp = child1.child("kwota").getValue().toString();
+                            ch1 = amountTemp.charAt(0);
+                            amount = amount + Double.parseDouble(amountTemp.substring(1));
+                        }
+                        if (ch1 == '+') {
+                            percent = Math.round(amount * 100 / income);
+                        }
+                        if (ch1 == '-') {
+                            percent = Math.round(amount * 100 / expense);
+                        }
+                        String img = dataSnapshot.child("catIcon").child(category).getValue().toString();
+                        int imgNumber = Integer.parseInt(img);
+
+                        //add model
+                        String displayAmount = ch1 + String.valueOf(amount);
+                        WalletModel walletModel = new WalletModel();
+                        walletModel.setCategory(category);
+                        walletModel.setAmount(displayAmount);
+                        walletModel.setPercent(percent);
+                        walletModel.setImg(imageArray[imgNumber]);
+                        modelsList.add(walletModel);
+                        amount = 0;
                     }
-                    if(ch1=='+') {percent = Math.round(amount * 100 / income);}
-                    if(ch1=='-') {percent = Math.round(amount * 100 / expense);}
-
-                    //add model
-                    String displayAmount = ch1 + String.valueOf(amount);
-                    WalletModel walletModel = new WalletModel();
-                    walletModel.setCategory(category);
-                    walletModel.setAmount(displayAmount);
-                    walletModel.setPercent(percent);
-                    walletModel.setImg(R.drawable.home_icon);
-                    modelsList.add(walletModel);
-                    amount = 0;
                 }
                 recyclerAdapterWallet = new RecyclerAdapterWallet(getApplicationContext(), modelsList);
                 recyclerView.setAdapter(recyclerAdapterWallet);
@@ -263,7 +279,7 @@ public class Wallet extends AppCompatActivity {
         String desc1 = "+" + income + " PLN";
         String desc2 = "-" + expense + " PLN";
 
-        config.startAngle(-90)// Starting angle offset
+        config.startAngle(-90)
                 .addData(new SimplePieInfo(income, Color.parseColor("#00ff00"), desc1))
                 .addData(new SimplePieInfo(expense, Color.parseColor("#ff0000"), desc2))
                 .drawText(true)
@@ -272,7 +288,7 @@ public class Wallet extends AppCompatActivity {
                 .guideLineMarginStart(0)
                 .pieRadius(350)
                 .autoSize(true)
-                .duration(2000);// draw pie animation duration
+                .duration(2000);
 
         mAnimatedPieView.applyConfig(config);
         mAnimatedPieView.start();

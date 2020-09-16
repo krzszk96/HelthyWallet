@@ -106,14 +106,14 @@
 
                     <EditText
                         android:id="@+id/addTitle"
-                        android:layout_width="210dp"
+                        android:layout_width="190dp"
                         android:layout_height="30dp"
                         android:background="@drawable/edit_text_border_dark"
                         android:ems="10"
                         android:paddingLeft="20dp"
                         android:hint="@string/hint_title"
                         android:inputType="text"
-                        android:textSize="15dp"
+                        android:textSize="13dp"
                         android:textColor="@color/mainColor"
                         android:textColorHint="@color/mainColor" />
                 </LinearLayout>
@@ -125,7 +125,8 @@
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="30dp"
                     android:layout_marginTop="10dp"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
 
                     <TextView
                         android:id="@+id/textView5"
@@ -136,6 +137,17 @@
                         android:textSize="15dp"
                         android:textStyle="bold"
                         android:text="Kwota:" />
+                    <TextView
+                        android:id="@+id/textViewPM"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textColor="@color/mainColor"
+                        android:textSize="15dp"
+                        android:textStyle="bold"
+                        android:text="+/-"
+                        android:layout_marginRight="5dp"
+                        android:gravity="right" />
                     <EditText
                         android:id="@+id/addAmountV"
                         android:layout_width="30dp"
@@ -152,14 +164,14 @@
 
                     <EditText
                         android:id="@+id/addAmount"
-                        android:layout_width="170dp"
+                        android:layout_width="150dp"
                         android:layout_height="30dp"
                         android:background="@drawable/edit_text_border_dark"
                         android:ems="10"
                         android:paddingLeft="20dp"
                         android:hint="@string/hint_amount"
                         android:inputType="text"
-                        android:textSize="15dp"
+                        android:textSize="13dp"
                         android:textColor="@color/mainColor"
                         android:textColorHint="@color/mainColor" />
                 </LinearLayout>
@@ -182,42 +194,64 @@
                         android:textStyle="bold"
                         android:text="Data:" />
 
+
+
                     <EditText
                         android:id="@+id/addDateD"
-                        android:layout_width="60dp"
+                        android:layout_width="50dp"
                         android:layout_height="30dp"
-                        android:layout_marginRight="15dp"
                         android:background="@drawable/edit_text_border_dark"
                         android:ems="10"
                         android:paddingLeft="10dp"
                         android:hint="dzień"
                         android:inputType="text"
-                        android:textSize="15dp"
+                        android:textSize="13dp"
                         android:textColor="@color/mainColor"
                         android:textColorHint="@color/mainColor" />
+                    <TextView
+                        android:id="@+id/textViewM"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/mainColor"
+                        android:textSize="15dp"
+                        android:textStyle="bold"
+                        android:text="/"
+                        android:layout_marginRight="5dp"
+                        android:layout_marginLeft="10dp"
+                        android:gravity="right"/>
                     <EditText
                         android:id="@+id/addDateM"
-                        android:layout_width="60dp"
+                        android:layout_width="50dp"
                         android:layout_height="30dp"
-                        android:layout_marginRight="15dp"
                         android:background="@drawable/edit_text_border_dark"
                         android:ems="10"
                         android:paddingLeft="10dp"
                         android:hint="mies"
                         android:inputType="text"
-                        android:textSize="15dp"
+                        android:textSize="13dp"
                         android:textColor="@color/mainColor"
                         android:textColorHint="@color/mainColor" />
+                    <TextView
+                        android:id="@+id/textViewY"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/mainColor"
+                        android:textSize="15dp"
+                        android:textStyle="bold"
+                        android:text="/"
+                        android:layout_marginRight="5dp"
+                        android:layout_marginLeft="10dp"
+                        android:gravity="right"/>
                     <EditText
                         android:id="@+id/addDateY"
-                        android:layout_width="60dp"
+                        android:layout_width="50dp"
                         android:layout_height="30dp"
                         android:background="@drawable/edit_text_border_dark"
                         android:ems="10"
                         android:paddingLeft="10dp"
                         android:hint="rok"
                         android:inputType="text"
-                        android:textSize="15dp"
+                        android:textSize="13dp"
                         android:textColor="@color/mainColor"
                         android:textColorHint="@color/mainColor" />
                 </LinearLayout>
@@ -228,7 +262,8 @@
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="30dp"
                     android:layout_marginTop="10dp"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
 
                     <TextView
                         android:id="@+id/textView7"
@@ -241,21 +276,11 @@
                         android:textStyle="bold" />
                     <Spinner
                         android:id="@+id/categorySpinner"
-                        android:layout_width="200dp"
+                        android:layout_width="190dp"
                         android:layout_height="30dp"
+                        android:textColor="@color/mainColor"
+                        android:background="@drawable/spinner_background"
                         />
-<!--                    <EditText-->
-<!--                        android:id="@+id/addCategory"-->
-<!--                        android:layout_width="230dp"-->
-<!--                        android:layout_height="30dp"-->
-<!--                        android:background="@drawable/edit_text_border_dark"-->
-<!--                        android:ems="10"-->
-<!--                        android:paddingLeft="20dp"-->
-<!--                        android:hint="@string/hint_category"-->
-<!--                        android:inputType="text"-->
-<!--                        android:textSize="15dp"-->
-<!--                        android:textColor="@color/mainColor"-->
-<!--                        android:textColorHint="@color/mainColor" />-->
 
                 </LinearLayout>
 
@@ -274,7 +299,7 @@
             </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="140dp"
+            android:layout_height="175dp"
             android:layout_marginBottom="15dp"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
@@ -335,6 +360,33 @@
                     android:textColor="@color/mainColor"
                     android:textColorHint="@color/mainColor" />
 
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="30dp"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/textViewIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Ikona:"
+                    android:textColor="@color/mainColor"
+                    android:textSize="15dp"
+                    android:textStyle="bold" />
+                <Spinner
+                    android:id="@+id/iconSpinner"
+                    android:layout_width="90dp"
+                    android:layout_height="40dp"
+                    android:textColor="@color/mainColor"
+                    android:background="@drawable/spinner_background"
+                    />
 
             </LinearLayout>
             <Button

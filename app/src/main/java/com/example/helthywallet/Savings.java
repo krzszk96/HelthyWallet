@@ -132,23 +132,32 @@ public class Savings extends AppCompatActivity {
         chargeAccountVal = (EditText) findViewById(R.id.chargeAccount);
         topUpShow = (TextView) findViewById(R.id.accBalance);
 
-        reference1.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+        String ifNotEmpty = chargeAccountVal.getText().toString();
 
-                reference1.setValue(topUpShow.getText().toString());
-                double investAccBalance = Double.parseDouble(topUpShow.getText().toString());
-                double operation = Double.parseDouble(chargeAccountVal.getText().toString());
-                investAccBalance = investAccBalance + operation;
-                String update = df2.format(investAccBalance);
-                topUpShow.setText(String.valueOf(update));
-                reference1.setValue(topUpShow.getText().toString());
-                chargeAccountVal.setText("");
+        if(!ifNotEmpty.equals("")) {
 
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {}
-        });
+            reference1.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                    reference1.setValue(topUpShow.getText().toString());
+                    double investAccBalance = Double.parseDouble(topUpShow.getText().toString());
+                    double operation = Double.parseDouble(chargeAccountVal.getText().toString());
+                    investAccBalance = investAccBalance + operation;
+                    String update = df2.format(investAccBalance);
+                    topUpShow.setText(String.valueOf(update));
+                    reference1.setValue(topUpShow.getText().toString());
+                    chargeAccountVal.setText("");
+
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                }
+            });
+        }else{
+            Toast.makeText(Savings.this, "Wpisz kwotę doładowania", Toast.LENGTH_LONG).show();
+        }
     }
     private void withdrawAccount(){
         String ref = FirebaseAuth.getInstance().getCurrentUser().getUid();
@@ -157,30 +166,39 @@ public class Savings extends AppCompatActivity {
         chargeAccountVal = (EditText) findViewById(R.id.chargeAccount);
         topUpShow = (TextView) findViewById(R.id.accBalance);
 
-        reference1.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+        String ifNotEmpty = chargeAccountVal.getText().toString();
 
-                double investAccBalance = Double.parseDouble(topUpShow.getText().toString());
-                if(investAccBalance>0) {
-                    double operation = Double.parseDouble(chargeAccountVal.getText().toString());
-                    if(operation>investAccBalance){
-                        Toast.makeText(Savings.this, "Za mało środków na konice", Toast.LENGTH_LONG).show();
-                    }else{
-                        investAccBalance = investAccBalance - operation;
-                        String update = df2.format(investAccBalance);
-                        topUpShow.setText(String.valueOf(update));
-                        reference1.setValue(topUpShow.getText().toString());
-                        chargeAccountVal.setText("");
+        if(!ifNotEmpty.equals("")) {
+            reference1.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                    double investAccBalance = Double.parseDouble(topUpShow.getText().toString());
+                    if (investAccBalance > 0) {
+                        double operation = Double.parseDouble(chargeAccountVal.getText().toString());
+                        if (operation > investAccBalance) {
+                            Toast.makeText(Savings.this, "Za mało środków na konice", Toast.LENGTH_LONG).show();
+                        } else {
+                            investAccBalance = investAccBalance - operation;
+                            String update = df2.format(investAccBalance);
+                            topUpShow.setText(String.valueOf(update));
+                            reference1.setValue(topUpShow.getText().toString());
+                            chargeAccountVal.setText("");
+                        }
+
+                    } else {
+                        Toast.makeText(Savings.this, "Brak środków do wypłacenia", Toast.LENGTH_LONG).show();
                     }
 
-                }else{
-                    Toast.makeText(Savings.this, "Brak środków do wypłacenia", Toast.LENGTH_LONG).show();
                 }
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {}
-        });
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                }
+            });
+        }else{
+            Toast.makeText(Savings.this, "Wpisz kwotę jaką chcesz wypłacić", Toast.LENGTH_LONG).show();
+        }
     }
     public static boolean isNumeric(String strNum) {
         if (strNum == null) {
@@ -215,8 +233,10 @@ public class Savings extends AppCompatActivity {
     public void addDeposit(){
 
         String ref = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        reference = FirebaseDatabase.getInstance().getReference("users").child(ref).child("deposits");
-        reference1 = FirebaseDatabase.getInstance().getReference("users").child(ref);
+        reference = FirebaseDatabase.getInstance().
+                getReference("users").child(ref).child("deposits");
+        reference1 = FirebaseDatabase.getInstance().
+                getReference("users").child(ref);
 
         inTitle = (EditText) findViewById(R.id.addTitleDep);
         inAmount = (EditText) findViewById(R.id.addAmountDep);
@@ -238,10 +258,14 @@ public class Savings extends AppCompatActivity {
                 double checkValue = Double.parseDouble(inAmount.getText().toString());
                 if(checkConditions()) {
                     if (checkValue <= checkAcc) {
-                        reference.child(Long.toString(count1)).child("tytul").setValue(inTitle.getText().toString());
-                        reference.child(Long.toString(count1)).child("kwota").setValue(inAmount.getText().toString());
-                        reference.child(Long.toString(count1)).child("okres").setValue(inTime.getText().toString());
-                        reference.child(Long.toString(count1)).child("odsetki").setValue(inInterest.getText().toString());
+                        reference.child(Long.toString(count1)).child("tytul")
+                                .setValue(inTitle.getText().toString());
+                        reference.child(Long.toString(count1)).child("kwota")
+                                .setValue(inAmount.getText().toString());
+                        reference.child(Long.toString(count1)).child("okres")
+                                .setValue(inTime.getText().toString());
+                        reference.child(Long.toString(count1)).child("odsetki")
+                                .setValue(inInterest.getText().toString());
                         inTitle.setText("");
                         inAmount.setText("");
                         inTime.setText("");
@@ -249,10 +273,9 @@ public class Savings extends AppCompatActivity {
                         String updateacc = String.valueOf(df2.format((checkAcc - checkValue)));
                         reference1.child("investAcc").setValue(updateacc);
                     } else {
-                        Toast.makeText(Savings.this, "Za mało środków na konice", Toast.LENGTH_LONG).show();
-                    }
-                }
-            }
+                        Toast.makeText(Savings.this,
+                                "Za mało środków na konice", Toast.LENGTH_LONG).show();
+                    } } }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {}
         });

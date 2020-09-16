@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -34,12 +35,15 @@ public class MainViewChart extends AppCompatActivity {
 
     EditText inAmount, inTitle, newCat, inAmountV, inDateD, inDateM, inDateY;
     Button addCategory, addData;
-    Spinner spinCats;
+    Spinner spinCats, iconSpinner;
     ImageView menu_btn;
 
-    DatabaseReference reference, refSpin, refCat;
+    DatabaseReference reference, refSpin, refCat, referenceIcon;
     ValueEventListener listener;
     ArrayAdapter<String> adapter;
+
+    int clickedPosition;
+
     ArrayList<String> spinnerDatalist;
 
     Animation scaleUp,scaleDown;
@@ -99,6 +103,26 @@ public class MainViewChart extends AppCompatActivity {
         spinCats.setAdapter(adapter);
         retrieveData();
 
+        iconSpinner = findViewById(R.id.iconSpinner);
+
+        SimpleImageArrayAdapter adapter = new SimpleImageArrayAdapter(getApplicationContext(),
+                new Integer[]{R.drawable.cat_bill_icon, R.drawable.cat_car_icon,
+                        R.drawable.cat_child_icon, R.drawable.cat_family_icon,
+                        R.drawable.cat_food_icon , R.drawable.cat_home_icon ,
+                        R.drawable.cat_present_icon , R.drawable.cat_shopping_icon,
+                        R.drawable.cat_work_icon});
+        iconSpinner.setAdapter(adapter);
+
+        iconSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                clickedPosition = parent.getSelectedItemPosition();
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+
         addData = (Button) findViewById(R.id.addDataBtn);
         addData.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -117,21 +141,32 @@ public class MainViewChart extends AppCompatActivity {
         String textM = inDateM.getText().toString();
         String textY = inDateY.getText().toString();
 
-        if(title.equals("")){Toast.makeText(MainViewChart.this, "Wpisz tytuł", Toast.LENGTH_SHORT).show(); return false;}
-        if(sign.equals("")){Toast.makeText(MainViewChart.this, "Wpisz znak + lub -", Toast.LENGTH_SHORT).show(); return false;}
-        if(amount.equals("")){Toast.makeText(MainViewChart.this, "Wpisz kwotę transakcji", Toast.LENGTH_SHORT).show(); return false;}
-        if(textD.equals("")||textM.equals("")||textY.equals("")){Toast.makeText(MainViewChart.this, "Wpisz pełną datę", Toast.LENGTH_SHORT).show(); return false;}
+        if(title.equals("")){Toast.makeText(MainViewChart.this,
+                "Wpisz tytuł", Toast.LENGTH_SHORT).show(); return false;}
+        if(sign.equals("")){Toast.makeText(MainViewChart.this,
+                "Wpisz znak + lub -", Toast.LENGTH_SHORT).show(); return false;}
+        if(amount.equals("")){Toast.makeText(MainViewChart.this,
+                "Wpisz kwotę transakcji", Toast.LENGTH_SHORT).show(); return false;}
+        if(textD.equals("")||textM.equals("")||textY.equals("")){
+            Toast.makeText(MainViewChart.this, "Wpisz pełną datę",
+                    Toast.LENGTH_SHORT).show(); return false;}
 
         int day = Integer.valueOf(textD);
         int month = Integer.valueOf(textM);
         int year = Integer.valueOf(textY);
 
-        if(title.length()>=15){Toast.makeText(MainViewChart.this, "Tytuł za długi, maks 15 znaków", Toast.LENGTH_SHORT).show(); return false;}
-        if(sign.length()>1){Toast.makeText(MainViewChart.this, "można wpisać tylko + lub -", Toast.LENGTH_SHORT).show(); return false;}
-        if(!isNumeric(amount)){Toast.makeText(MainViewChart.this, "Uwaga tekst zamiast kwoty!", Toast.LENGTH_SHORT).show(); return false;}
-        if(day > 31 || day < 0 ){Toast.makeText(MainViewChart.this, "Błędny dzień", Toast.LENGTH_SHORT).show(); return false;}
-        if(month > 12 || month < 0 ) {Toast.makeText(MainViewChart.this, "Błędny miesiąc", Toast.LENGTH_SHORT).show(); return false;}
-        if(year > 2500 || year < 2019 ) {Toast.makeText(MainViewChart.this, "Błędny rok", Toast.LENGTH_SHORT).show(); return false;}
+        if(title.length()>=15){Toast.makeText(MainViewChart.this,
+                "Tytuł za długi, maks 15 znaków", Toast.LENGTH_SHORT).show(); return false;}
+        if(sign.length()>1){Toast.makeText(MainViewChart.this,
+                "można wpisać tylko + lub -", Toast.LENGTH_SHORT).show(); return false;}
+        if(!isNumeric(amount)){Toast.makeText(MainViewChart.this,
+                "Uwaga tekst zamiast kwoty!", Toast.LENGTH_SHORT).show(); return false;}
+        if(day > 31 || day < 0 ){Toast.makeText(MainViewChart.this,
+                "Błędny dzień", Toast.LENGTH_SHORT).show(); return false;}
+        if(month > 12 || month < 0 ) {Toast.makeText(MainViewChart.this,
+                "Błędny miesiąc", Toast.LENGTH_SHORT).show(); return false;}
+        if(year > 2500 || year < 2019 ) {Toast.makeText(MainViewChart.this,
+                "Błędny rok", Toast.LENGTH_SHORT).show(); return false;}
 
         return true;
     }
@@ -157,7 +192,9 @@ public class MainViewChart extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 String newCategory = newCat.getText().toString();
+                String clickedIcon = String.valueOf(clickedPosition);
                 refSpin.child("categories").child(newCategory).setValue("0");
+                refSpin.child("categories").child("catIcon").child(newCategory).setValue(clickedIcon);
                 newCat.setText("");
                 spinnerDatalist.clear();
                 retrieveData();
@@ -178,8 +215,11 @@ public class MainViewChart extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 spinnerDatalist.clear();
                 for(DataSnapshot item:dataSnapshot.getChildren()){
+                    String category = item.getKey();
+                    if(!category.equals("catIcon")){
+                        spinnerDatalist.add(category);
+                    }
 
-                    spinnerDatalist.add(item.getKey());
                 }
                 adapter.notifyDataSetChanged();
             }
@@ -203,6 +243,7 @@ public class MainViewChart extends AppCompatActivity {
                 count1++;
                 String amount = inAmountV.getText().toString() + inAmount.getText().toString();
 
+
                 if(checkConditions()) {
                     String date = inDateD.getText().toString() + "/" + inDateM.getText().toString() + "/" + inDateY.getText().toString();
                     refCat.child(Long.toString(count1)).child("data").setValue(date);
@@ -212,7 +253,6 @@ public class MainViewChart extends AppCompatActivity {
                     inAmount.setText("");
                     inDateD.setText(""); inDateM.setText(""); inDateY.setText("");
                 }
-
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {}
@@ -223,7 +263,8 @@ public class MainViewChart extends AppCompatActivity {
     }
     public void removeItem(final int position){
         String ref = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        reference = FirebaseDatabase.getInstance().getReference("users").child(ref).child("categories");
+        reference = FirebaseDatabase.getInstance()
+                .getReference("users").child(ref).child("categories");
 
         String category = modelsList.get(position).getCategory();
         String checkId = modelsList.get(position).getId();
@@ -232,35 +273,45 @@ public class MainViewChart extends AppCompatActivity {
 
         modelsList.remove(position);
         recyclerAdapterTransactions.notifyItemRemoved(position);
-
     }
     public void displayData2(){
         String ref = FirebaseAuth.getInstance().getCurrentUser().getUid();
         reference = FirebaseDatabase.getInstance().getReference("users").child(ref).child("categories");
-        Log.d("TAG",  "test1");
 
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 try {
                     ClearAll();
+                    int[] imageArray = {R.drawable.cat_bill_icon, R.drawable.cat_car_icon,
+                            R.drawable.cat_child_icon, R.drawable.cat_family_icon,
+                            R.drawable.cat_food_icon , R.drawable.cat_home_icon ,
+                            R.drawable.cat_present_icon , R.drawable.cat_shopping_icon,
+                            R.drawable.cat_work_icon};
 
                     for (DataSnapshot children : dataSnapshot.getChildren()) {
                         for (DataSnapshot i : children.getChildren()) {
-                            String category = children.getKey();
-                            String id = i.getKey();
-                            String title = i.child("tytul").getValue().toString();
-                            String amount = i.child("kwota").getValue().toString();
-                            String date = i.child("data").getValue().toString();
 
-                            TransactionModel transaction = new TransactionModel();
-                            transaction.setCategory(category);
-                            transaction.setTitle(title);
-                            transaction.setAmount(amount);
-                            transaction.setDate(date);
-                            transaction.setImg(R.drawable.home_icon);
-                            transaction.setId(id);
-                            modelsList.add(transaction);
+                            final String category = children.getKey();
+
+                            if(!category.equals("catIcon")) {
+                                String id = i.getKey();
+                                String title = i.child("tytul").getValue().toString();
+                                String amount = i.child("kwota").getValue().toString();
+                                String date = i.child("data").getValue().toString();
+                                String img = dataSnapshot.child("catIcon").child(category).getValue().toString();
+                                int imgNumber = Integer.parseInt(img);
+
+                                TransactionModel transaction = new TransactionModel();
+                                transaction.setCategory(category);
+                                transaction.setTitle(title);
+                                transaction.setAmount(amount);
+                                transaction.setDate(date);
+                                transaction.setImg(imageArray[imgNumber]);
+                                transaction.setId(id);
+                                modelsList.add(transaction);
+                                Log.d("TAG", "msg" + img);
+                            }
                         }
                     }
                 }catch (Exception e){}

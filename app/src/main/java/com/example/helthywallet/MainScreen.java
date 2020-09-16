@@ -75,6 +75,7 @@ public class MainScreen extends AppCompatActivity {
             public void onClick(View v) {
                 settings_btn.startAnimation(scaleUp);
                 settings_btn.startAnimation(scaleDown);
+                startActivity(new Intent(MainScreen.this, Settings.class));
             }
         });
         reports_btn.setOnClickListener(new View.OnClickListener() {

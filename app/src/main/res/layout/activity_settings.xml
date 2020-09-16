@@ -1,9 +1,293 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Settings">
+    tools:context=".Savings"
+    android:background="@color/mainColor">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@android:color/white"
+        android:orientation="horizontal"
+        android:gravity="center">
+        <ImageView
+            android:id="@+id/imageView5"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:src="@drawable/walleticon" />
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Healthy Wallet"
+            android:textColor="@color/mainColor"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            android:paddingLeft="10dp"/>
+        <ImageView
+            android:id="@+id/imageView55"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginLeft="15dp"
+            android:tint="@color/mainColor"
+            android:src="@drawable/user_account_icon" />
+        <ImageView
+            android:id="@+id/image_menu"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginLeft="20dp"
+            android:tint="@color/mainColor"
+            android:src="@drawable/menu_btn" />
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="60dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="20dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="20dp"
+                android:paddingBottom="15dp"
+                android:background="@drawable/chart_background"
+                android:orientation="vertical">
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal"
+                    android:gravity="center">
+
+                    <ImageView
+                        android:id="@+id/imageView559"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:tint="@color/mainColor"
+                        android:src="@drawable/email_icon" />
+
+                    <TextView
+                        android:id="@+id/textView879"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginLeft="10dp"
+                        android:text="Zmień e-mail"
+                        android:textColor="@color/mainColor"
+                        android:textSize="15dp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="30dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/textView44"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Stary e-mail:"
+                        android:textColor="@color/mainColor"
+                        android:textSize="13dp"
+                        android:textStyle="bold" />
+                    <EditText
+                        android:id="@+id/oldEmail"
+                        android:layout_width="180dp"
+                        android:layout_height="30dp"
+                        android:background="@drawable/edit_text_border_dark"
+                        android:ems="10"
+                        android:paddingLeft="20dp"
+                        android:hint="wpisz stary e-mail"
+                        android:inputType="text"
+                        android:textSize="15dp"
+                        android:textColor="@color/mainColor"
+                        android:textColorHint="@color/mainColor" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginTop="5dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/textView441"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Nowy e-mail:"
+                        android:textColor="@color/mainColor"
+                        android:textSize="13dp"
+                        android:textStyle="bold" />
+                    <EditText
+                        android:id="@+id/newEmail"
+                        android:layout_width="180dp"
+                        android:layout_height="30dp"
+                        android:background="@drawable/edit_text_border_dark"
+                        android:ems="10"
+                        android:paddingLeft="20dp"
+                        android:hint="wpisz nowy e-mail"
+                        android:inputType="text"
+                        android:textSize="15dp"
+                        android:textColor="@color/mainColor"
+                        android:textColorHint="@color/mainColor" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginLeft="20dp">
+
+                    <Button
+                        android:id="@+id/changeEmailBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="30dp"
+                        android:layout_marginLeft="10dp"
+                        android:paddingLeft="5dp"
+                        android:paddingRight="5dp"
+                        android:background="@drawable/custom_button_dark"
+                        android:text="Zmień e-mail"
+                        android:textAllCaps="false"
+                        android:textColor="@color/mainColor" />
+
+                </LinearLayout>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="20dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="20dp"
+                android:paddingBottom="15dp"
+                android:background="@drawable/chart_background"
+                android:orientation="vertical">
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal"
+                    android:gravity="center">
+
+                    <ImageView
+                        android:id="@+id/imageView5591"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:tint="@color/mainColor"
+                        android:src="@drawable/pass_icon" />
+
+                    <TextView
+                        android:id="@+id/textView8791"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginLeft="10dp"
+                        android:text="Zmień e-mail"
+                        android:textColor="@color/mainColor"
+                        android:textSize="15dp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="30dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/textView1"
+                        android:layout_width="50dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Stare hasło:"
+                        android:textColor="@color/mainColor"
+                        android:textSize="13dp"
+                        android:textStyle="bold" />
+                    <EditText
+                        android:id="@+id/oldPassword"
+                        android:layout_width="180dp"
+                        android:layout_height="30dp"
+                        android:background="@drawable/edit_text_border_dark"
+                        android:ems="10"
+                        android:paddingLeft="20dp"
+                        android:hint="wpisz stare hasło"
+                        android:inputType="text"
+                        android:textSize="15dp"
+                        android:textColor="@color/mainColor"
+                        android:textColorHint="@color/mainColor" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginTop="5dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/textView4411"
+                        android:layout_width="50dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Nowe hasło:"
+                        android:textColor="@color/mainColor"
+                        android:textSize="13dp"
+                        android:textStyle="bold" />
+                    <EditText
+                        android:id="@+id/newPassword"
+                        android:layout_width="180dp"
+                        android:layout_height="30dp"
+                        android:background="@drawable/edit_text_border_dark"
+                        android:ems="10"
+                        android:paddingLeft="20dp"
+                        android:hint="wpisz nowe hasło"
+                        android:inputType="text"
+                        android:textSize="15dp"
+                        android:textColor="@color/mainColor"
+                        android:textColorHint="@color/mainColor" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginLeft="20dp">
+
+                    <Button
+                        android:id="@+id/changePasswordBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="30dp"
+                        android:layout_marginLeft="10dp"
+                        android:paddingLeft="5dp"
+                        android:paddingRight="5dp"
+                        android:background="@drawable/custom_button_dark"
+                        android:text="Zmień hasło"
+                        android:textAllCaps="false"
+                        android:textColor="@color/mainColor" />
+
+                </LinearLayout>
+            </LinearLayout>
+
+
+        </LinearLayout>
+    </ScrollView>
+
+</RelativeLayout>

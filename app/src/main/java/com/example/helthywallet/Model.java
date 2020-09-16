@@ -5,9 +5,7 @@ public class Model { //this is model class for investments recyclerview
     private String name, id, currencyValue, currencyWorthBefore, rate;
     private int img;
 
-    public Model(){
-
-    }
+    public Model(){ }
 
     public Model(String name,String currencyValue,String currencyWorthBefore,String rate,int img, String id){
         this.name = name;
